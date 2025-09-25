@@ -4,9 +4,9 @@ modules:
     - Cli
     - \App\Tests\Support\Helper\Cli
     - Db:
-        dsn: 'pgsql:host=db_card;port=5432;dbname=app'
-        user: 'docker'
-        password: 'dock123'
+        dsn: 'pgsql:host=%DB_HOST%;port=%DB_PORT%;dbname=%DB_NAME%'
+        user: '%DB_USERNAME%'
+        password: '%DB_PASSWORD%'
         dump: 'tests/Support/Data/dump.sql'
         populate: true
         cleanup: true
