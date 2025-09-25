@@ -4,14 +4,18 @@ on:
   push:
     branches:
       - main
+      - develop
   pull_request:
+    branches:
+      - main
+      - develop
 
 jobs:
   test:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:14
+        image: postgres:15
         env:
           POSTGRES_DB: app
           POSTGRES_USER: docker
@@ -25,16 +29,15 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: Check out repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up PHP
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
+          extensions: intl, pdo_pgsql, pgsql
           coverage: none
-          extensions: intl, pdo_pgsql, pdo_sqlite
-          ini-values: date.timezone=UTC
 
       - name: Get Composer cache directory
         id: composer-cache
@@ -44,46 +47,41 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-php-8.3-${{ hashFiles('''**/composer.lock''') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('''**/composer.lock''') }}
           restore-keys: |
-            ${{ runner.os }}-php-8.3-
+            ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --no-interaction --no-progress --prefer-dist
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
 
-      - name: Prepare environment file
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
-      - name: Wait for PostgreSQL to be ready
+      - name: Create .env file
         run: |
-          for i in {1..10}; do
-            pg_isready -h localhost -p 5432 -U docker -d app && break
+          echo "YII_ENV=test" >> .env
+          echo "DB_HOST=localhost" >> .env
+          echo "DB_PORT=5432" >> .env
+          echo "DB_NAME=app" >> .env
+          echo "DB_USERNAME=docker" >> .env
+          echo "DB_PASSWORD=dock123" >> .env
+          echo "BASE_URL=/" >> .env
+
+      - name: Wait for PostgreSQL
+        run: |
+          until pg_isready -h localhost -p 5432 -U docker; do
+            echo "Waiting for PostgreSQL..."
             sleep 2
           done
 
-      - name: Debug Environment
-        run: |
-          echo "--- Shell Environment (printenv) ---"
-          printenv
-          echo "--- PHP \$_ENV variable ---"
-          php -r 'print_r($_ENV);'
-
-      - name: Run migrations
+      - name: Run database migrations
         run: ./yii migrate/up --no-interaction
-        env:
-          YII_ENV: test
-          DB_HOST: localhost
-          DB_PORT: 5432
-          DB_NAME: app
-          DB_USERNAME: docker
-          DB_PASSWORD: dock123
 
-      - name: Run tests
+      - name: Run Codeception Tests
         run: composer test
-        env:
-          YII_ENV: test
-          DB_HOST: localhost
-          DB_PORT: 5432
-          DB_NAME: app
-          DB_USERNAME: docker
-          DB_PASSWORD: dock123
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: |
+            runtime/tests/_output/
+          retention-days: 7
