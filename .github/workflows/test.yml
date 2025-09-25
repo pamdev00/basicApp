@@ -77,11 +77,3 @@ jobs:
       - name: Run Codeception Tests
         run: composer test
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-results
-          path: |
-            runtime/tests/_output/
-          retention-days: 7
