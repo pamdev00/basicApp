@@ -74,6 +74,9 @@ jobs:
       - name: Run database migrations
         run: ./yii migrate/up --no-interaction
 
+      - name: Create runtime directories
+        run: mkdir -p runtime/rate-limiter
+
       - name: Run Codeception Tests
         run: composer test
 
