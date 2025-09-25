@@ -54,6 +54,9 @@ jobs:
       - name: Prepare environment file
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
+      - name: Map database hostname for test suite
+        run: echo "127.0.0.1 db_card" | sudo tee -a /etc/hosts
+
       - name: Run tests
         run: composer test
         env:
