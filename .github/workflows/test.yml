@@ -44,7 +44,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-php-8.3-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-php-8.3-${{ hashFiles('''**/composer.lock''') }}
           restore-keys: |
             ${{ runner.os }}-php-8.3-
 
@@ -61,6 +61,16 @@ jobs:
             sleep 2
           done
 
+      - name: Run migrations
+        run: ./yii migrate/up --no-interaction
+        env:
+          YII_ENV: test
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: app
+          DB_USERNAME: docker
+          DB_PASSWORD: dock123
+
       - name: Run tests
         run: composer test
         env:
@@ -68,5 +78,5 @@ jobs:
           DB_HOST: localhost
           DB_PORT: 5432
           DB_NAME: app
-          DB_USER: docker
+          DB_USERNAME: docker
           DB_PASSWORD: dock123
