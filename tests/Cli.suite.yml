@@ -1,0 +1,13 @@
+actor: CliTester
+modules:
+  enabled:
+    - Cli
+    - \App\Tests\Support\Helper\Cli
+    - Db:
+        dsn: 'pgsql:host=db_card;port=5432;dbname=app'
+        user: 'docker'
+        password: 'dock123'
+        dump: 'tests/Support/Data/dump.sql'
+        populate: true
+        cleanup: true
+  step_decorators: ~

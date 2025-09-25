@@ -1,0 +1,94 @@
+services:
+  nginx:
+    container_name: card-nginx
+    build:
+      context: docker/dev/nginx
+    ports:
+      - "8091:80"
+    volumes:
+      - ./:/app
+      - ./docker/dev/nginx/log:/var/log/nginx
+    restart: always
+    networks:
+      - demo
+
+  card-php-fpm:
+    build:
+      context: docker/dev/php-fpm
+      args:
+        USER_ID: ${USER_ID:-1000}
+        GROUP_ID: ${GROUP_ID:-1000}
+    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
+    depends_on:
+      - db_card
+    volumes:
+      - ./:/app
+      - ./docker/dev/php-fpm/logs:/usr/local/etc/php/logs/
+    environment:
+      PHP_IDE_CONFIG: ${PHP_IDE_CONFIG:-serverName=docker}
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
+      XDEBUG_CONFIG: "client_host=host.docker.internal client_port=${XDEBUG_CLIENT_PORT:-9003}"
+      XDEBUG_TRIGGER: 'yes' # Remove me to disable debugging
+    extra_hosts:
+      - host.docker.internal:${HOST_IP:-172.17.0.1}
+    networks:
+      - demo
+
+  card-php-cli:
+    container_name: card-php-cli
+    build:
+      context: docker/dev/php-cli
+      args:
+        USER_ID: ${USER_ID:-1000}
+        GROUP_ID: ${GROUP_ID:-1000}
+    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
+    volumes:
+      - ./:/app
+      - ./docker/dev/php-cli/log:/var/log
+    environment:
+      PHP_IDE_CONFIG: ${PHP_IDE_CONFIG:-serverName=docker}
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
+      XDEBUG_CONFIG: "client_host=host.docker.internal client_port=${XDEBUG_CLIENT_PORT:-9003}"
+      XDEBUG_TRIGGER: 'yes' # Remove me to disable debugging
+    extra_hosts:
+      - host.docker.internal:${HOST_IP:-172.17.0.1}
+    networks:
+      - demo
+
+
+  db_card:
+    image: postgres:17
+    container_name: db_card
+    restart: always
+    environment:
+      # База, пользователь и пароль берутся из переменных окружения
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "54333:5432"                         # Проброс портов: 54332 → 5432
+    volumes:
+      - ./docker/dev/postgres/db:/var/lib/postgresql/db:rw
+      - ./docker/dev/postgres/log:/var/lib/postgresql/db/log:rw     # <-- здесь будут файлы логов
+      - ./docker/dev/postgres/init:/docker-entrypoint-initdb.d:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"                   # Ограничение до 50% CPU
+          memory: 512M                      # Ограничение памяти до 512MB
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - demo
+networks:
+  demo:
+    driver: bridge
+    external: true

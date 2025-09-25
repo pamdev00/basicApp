@@ -1,0 +1,22 @@
+actor: AcceptanceTester
+extensions:
+  enabled:
+    - Codeception\Extension\RunProcess:
+        0: php -d variables_order=EGPCS -S 127.0.0.1:8881 -t public
+        sleep: 1
+modules:
+  enabled:
+    - REST:
+        url: http://127.0.0.1:8881%BASE_URL%
+        depends: PhpBrowser
+    - Db:
+        dsn: 'pgsql:host=db_card;port=5432;dbname=app'
+        user: 'docker'
+        password: 'dock123'
+        dump: 'tests/Support/Data/dump.sql'
+        populate: true
+        cleanup: true
+    - Filesystem:
+    - App\Tests\Support\Helper\Acceptance
+    - Asserts
+  step_decorators: ~
