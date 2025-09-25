@@ -9,6 +9,20 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      db_card:
+        image: postgres:14
+        env:
+          POSTGRES_DB: app
+          POSTGRES_USER: docker
+          POSTGRES_PASSWORD: dock123
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U docker -d app"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Check out repository
@@ -19,7 +33,7 @@ jobs:
         with:
           php-version: '8.3'
           coverage: none
-          extensions: intl, pdo_sqlite
+          extensions: intl, pdo_pgsql, pdo_sqlite
           ini-values: date.timezone=UTC
 
       - name: Get Composer cache directory
