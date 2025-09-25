@@ -61,6 +61,13 @@ jobs:
             sleep 2
           done
 
+      - name: Debug Environment
+        run: |
+          echo "--- Shell Environment (printenv) ---"
+          printenv
+          echo "--- PHP \$_ENV variable ---"
+          php -r 'print_r($_ENV);'
+
       - name: Run migrations
         run: ./yii migrate/up --no-interaction
         env:
