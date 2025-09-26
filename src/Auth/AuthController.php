@@ -62,13 +62,8 @@ final readonly class AuthController
             ),
             new OA\Response(
                 response: '409',
-                description: 'Conflict',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'error', type: 'string', example: 'User with this email already exists.')
-                    ],
-                    type: 'object'
-                )
+                description: 'Conflict - user with this email already exists',
+                content: new OA\JsonContent(ref: '#/components/schemas/ProblemDetails')
             )
         ]
     )]
@@ -183,6 +178,43 @@ final readonly class AuthController
         return $this->responseFactory->createResponse();
     }
 
+    #[OA\Get(
+        path: '/verify-email/{token}',
+        description: 'Verify user email with a token from the verification email',
+        summary: 'Verify user email',
+        parameters: [
+            new OA\Parameter(
+                name: 'token',
+                in: 'path',
+                required: true,
+                description: 'The verification token',
+                schema: new OA\Schema(type: 'string')
+            )
+        ],
+        tags: ['auth'],
+        responses: [
+            new OA\Response(
+                response: '200',
+                description: 'Email successfully verified',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'status', type: 'string', example: 'ok')
+                    ],
+                    type: 'object'
+                )
+            ),
+            new OA\Response(
+                response: '422',
+                description: 'Invalid, used, or expired token',
+                content: new OA\JsonContent(ref: '#/components/schemas/ProblemDetails')
+            ),
+            new OA\Response(
+                response: '500',
+                description: 'Internal server error',
+                content: new OA\JsonContent(ref: '#/components/schemas/ProblemDetails')
+            )
+        ]
+    )]
     public function verifyEmail(#[RouteArgument('token')] string $token): ResponseInterface
     {
         try {
@@ -219,8 +251,16 @@ final readonly class AuthController
         tags: ['auth'],
         responses: [
             new OA\Response(response: '202', description: 'Accepted'),
-            new OA\Response(response: '404', description: 'User not found'),
-            new OA\Response(response: '422', description: 'Validation error'),
+            new OA\Response(
+                response: '404',
+                description: 'User not found',
+                content: new OA\JsonContent(ref: '#/components/schemas/ProblemDetails')
+            ),
+            new OA\Response(
+                response: '422',
+                description: 'Validation error',
+                content: new OA\JsonContent(ref: '#/components/schemas/ProblemDetails')
+            ),
         ]
     )]
     public function resendVerification(ResendRequest $request): ResponseInterface
