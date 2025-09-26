@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Auth\Listener;
 
 use App\Auth\Listener\UserRegisteredListener;
+use App\Auth\RegistrationMailer;
 use App\Auth\UserRegistered;
 use App\User\User;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use App\Auth\RegistrationMailer;
+use Yiisoft\Config\Config;
+use Yiisoft\Config\ConfigPaths;
 use Yiisoft\Mailer\MailerInterface;
 use Yiisoft\Mailer\Message;
 use Yiisoft\Router\UrlGeneratorInterface;
@@ -23,10 +25,13 @@ final class UserRegisteredListenerTest extends TestCase
 
         // Mocks for UserRegisteredListener
         $listenerLogger = $this->createMock(LoggerInterface::class);
+        $verificationRouteName = $this->getVerificationRouteName();
+
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $urlGenerator
             ->expects($this->once())
             ->method('generateAbsolute')
+            ->with($verificationRouteName, ['token' => 'test-token'])
             ->willReturn('http://test.com/verify?token=test-token');
 
         // Mocks for RegistrationMailer
@@ -46,9 +51,45 @@ final class UserRegisteredListenerTest extends TestCase
         );
 
         // Create the listener with the real mailer service
-        $listener = new UserRegisteredListener($listenerLogger, $registrationMailer, $urlGenerator);
+        $listener = new UserRegisteredListener(
+            $listenerLogger,
+            $registrationMailer,
+            $urlGenerator,
+            $verificationRouteName
+        );
         $event = new UserRegistered($user, 'test-token');
 
         ($listener)($event);
+    }
+
+    private function getVerificationRouteName(): string
+    {
+        $this->ensureDatabaseEnv();
+
+        $config = new Config(
+            new ConfigPaths(dirname(__DIR__, 4), 'config'),
+            'test'
+        );
+
+        $params = $config->get('params');
+
+        return $params['app']['auth']['verificationRouteName'];
+    }
+
+    private function ensureDatabaseEnv(): void
+    {
+        $defaults = [
+            'DB_NAME' => 'app',
+            'DB_HOST' => 'localhost',
+            'DB_PORT' => '5432',
+            'DB_USERNAME' => 'app',
+            'DB_PASSWORD' => 'secret',
+        ];
+
+        foreach ($defaults as $name => $value) {
+            if (!array_key_exists($name, $_ENV)) {
+                $_ENV[$name] = $value;
+            }
+        }
     }
 }

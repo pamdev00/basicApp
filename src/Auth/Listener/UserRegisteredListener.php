@@ -15,7 +15,8 @@ final readonly class UserRegisteredListener
     public function __construct(
         private LoggerInterface $logger,
         private RegistrationMailer $registrationMailer,
-        private UrlGeneratorInterface $urlGenerator
+        private UrlGeneratorInterface $urlGenerator,
+        private string $verificationRouteName
     ) {
     }
 
@@ -25,11 +26,9 @@ final readonly class UserRegisteredListener
     public function __invoke(UserRegistered $event): void
     {
         $user = $event->user;
-        // TODO: The route for email verification does not exist yet. We need to create it.
-        // For now, let's assume its name will be 'auth/verify-email'.
         $verificationUrl = $this->urlGenerator->generateAbsolute(
-            name: 'auth/verify-email',
-          arguments: ['token' => $event->rawToken],
+            name: $this->verificationRouteName,
+            arguments: ['token' => $event->rawToken],
         );
 
         $this->logger->info('Generated verification URL: {url}', ['url' => $verificationUrl]);
