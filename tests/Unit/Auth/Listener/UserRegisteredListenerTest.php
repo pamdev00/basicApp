@@ -10,8 +10,6 @@ use App\Auth\UserRegistered;
 use App\User\User;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Yiisoft\Config\Config;
-use Yiisoft\Config\ConfigPaths;
 use Yiisoft\Mailer\MailerInterface;
 use Yiisoft\Mailer\Message;
 use Yiisoft\Router\UrlGeneratorInterface;
@@ -66,12 +64,7 @@ final class UserRegisteredListenerTest extends TestCase
     {
         $this->ensureDatabaseEnv();
 
-        $config = new Config(
-            new ConfigPaths(dirname(__DIR__, 4), 'config'),
-            'test'
-        );
-
-        $params = $config->get('params');
+        $params = require dirname(__DIR__, 4) . '/config/common/params.php';
 
         return $params['app']['auth']['verificationRouteName'];
     }
