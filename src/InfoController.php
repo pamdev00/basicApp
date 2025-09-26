@@ -11,7 +11,10 @@ use Yiisoft\DataResponse\DataResponseFactoryInterface;
 #[OA\Info(version: '1.0', title: 'Yii API application')]
 class InfoController
 {
-    public function __construct(private VersionProvider $versionProvider)
+    public function __construct(
+        private VersionProvider $versionProvider,
+        private AuthorProvider $authorProvider
+    )
     {
     }
 
@@ -39,6 +42,9 @@ class InfoController
     )]
     public function index(DataResponseFactoryInterface $responseFactory): ResponseInterface
     {
-        return $responseFactory->createResponse(['version' => $this->versionProvider->version, 'author' => 'yiisoft']);
+        return $responseFactory->createResponse([
+            'version' => $this->versionProvider->version,
+            'author' => $this->authorProvider->getAuthor(),
+        ]);
     }
 }

@@ -16,6 +16,14 @@ use Yiisoft\Yii\Cycle\Schema\SchemaProviderInterface;
 use Yiisoft\Yii\Middleware\Locale;
 
 return [
+    'app' => [
+        'info' => [
+            'author' => 'yiisoft',
+        ],
+        'auth' => [
+            'verificationRouteName' => 'auth/verify-email',
+        ],
+    ],
     'mailer' => [
         'adminEmail' => 'admin@example.com',
         'senderEmail' => 'sender@example.com',
