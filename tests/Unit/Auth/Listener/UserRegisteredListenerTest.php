@@ -5,84 +5,55 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Auth\Listener;
 
 use App\Auth\Listener\UserRegisteredListener;
-use App\Auth\RegistrationMailer;
+use App\Auth\RegistrationMailerInterface;
 use App\Auth\UserRegistered;
 use App\User\User;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Yiisoft\Mailer\MailerInterface;
-use Yiisoft\Mailer\Message;
+use Throwable;
 use Yiisoft\Router\UrlGeneratorInterface;
 
 final class UserRegisteredListenerTest extends TestCase
 {
-    public function testInvokeSendsEmail(): void
+    /**
+     * @throws Throwable
+     */
+    public function testListenSuccess(): void
     {
-        $user = $this->createMock(User::class);
-        $user->method('getEmail')->willReturn('test@example.com');
+        $user = new User('test-login', 'password', 'test@example.com', 'en-US', 'UTC');
+        $rawToken = 'test-token';
+        $event = new UserRegistered($user, $rawToken);
 
-        // Mocks for UserRegisteredListener
-        $listenerLogger = $this->createMock(LoggerInterface::class);
-        $verificationRouteName = $this->getVerificationRouteName();
-
+        $logger = $this->createMock(LoggerInterface::class);
+        $mailer = $this->createMock(RegistrationMailerInterface::class);
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+
+        $verificationUrl = 'http://test.com/verify/test-token';
         $urlGenerator
             ->expects($this->once())
             ->method('generateAbsolute')
-            ->with($verificationRouteName, ['token' => 'test-token'])
-            ->willReturn('http://test.com/verify?token=test-token');
+            ->with('auth/verify', ['token' => $rawToken])
+            ->willReturn($verificationUrl);
 
-        // Mocks for RegistrationMailer
-        $mailerLogger = $this->createMock(LoggerInterface::class);
-        $mailer = $this->createMock(MailerInterface::class);
         $mailer
             ->expects($this->once())
             ->method('send')
-            ->with($this->isInstanceOf(Message::class));
+            ->with(
+                $user->getEmail(),
+                'Email verification',
+                sprintf(
+                    'Please verify your email by clicking this link: <a href="%1$s">%1$s</a>',
+                    $verificationUrl
+                )
+            );
 
-        // Create a real RegistrationMailer with mocked dependencies
-        $registrationMailer = new RegistrationMailer(
-            $mailerLogger,
-            $mailer,
-            'from@example.com',
-            'to@example.com'
-        );
-
-        // Create the listener with the real mailer service
         $listener = new UserRegisteredListener(
-            $listenerLogger,
-            $registrationMailer,
+            $logger,
+            $mailer,
             $urlGenerator,
-            $verificationRouteName
+            'auth/verify'
         );
-        $event = new UserRegistered($user, 'test-token');
 
-        ($listener)($event);
-    }
-
-    private function getVerificationRouteName(): string
-    {
-        $this->ensureDatabaseEnv();
-
-        $params = require dirname(__DIR__, 4) . '/config/common/params.php';
-
-        return $params['app']['auth']['verificationRouteName'];
-    }
-
-    private function ensureDatabaseEnv(): void
-    {
-        $defaults = [
-            'DB_NAME' => 'app',
-            'DB_HOST' => 'localhost',
-            'DB_PORT' => '5432',
-            'DB_USERNAME' => 'app',
-            'DB_PASSWORD' => 'secret',
-        ];
-
-        foreach ($defaults as $name => $value) {
-            if (!array_key_exists($name, $_ENV)) {
-                $_ENV[$name] = $value;
-            }
-        }
+        $listener($event);
     }
 }

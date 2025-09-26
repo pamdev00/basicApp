@@ -17,6 +17,7 @@ use Yiisoft\DataResponse\DataResponseFactoryInterface as ResponseFactory;
 use Yiisoft\Router\HydratorAttribute\RouteArgument;
 use Yiisoft\Validator\ValidatorInterface;
 use App\Auth\ResendVerificationService;
+use App\Dto\ProblemDetails;
 use App\Auth\ResendRequest;
 
 #[OA\Tag(name: 'auth', description: 'Authentication')]
@@ -87,7 +88,13 @@ final readonly class AuthController
                 $request->getEmail(),
             );
         } catch (Throwable $e) {
-            return $this->responseFactory->createResponse(['error' => $e->getMessage()], 409);
+            $problemDetails = new ProblemDetails(
+                type: '/docs/errors/user-already-exists',
+                title: 'User Already Exists',
+                status: 409,
+                detail: $e->getMessage()
+            );
+            return $this->responseFactory->createResponse($problemDetails);
         }
 
 
@@ -181,9 +188,21 @@ final readonly class AuthController
         try {
             $this->verifyEmailService->verify($token);
         } catch (InvalidTokenException|TokenUsedException|TokenExpiredException $e) {
-            return $this->responseFactory->createResponse(['error' => $e->getMessage()], 422);
+            $problemDetails = new ProblemDetails(
+                type: '/docs/errors/invalid-verification-token',
+                title: 'Invalid Verification Token',
+                status: 422,
+                detail: $e->getMessage()
+            );
+            return $this->responseFactory->createResponse($problemDetails);
         } catch (Throwable $e) {
-            return $this->responseFactory->createResponse(['error' => 'An unexpected error occurred.'], 500);
+            $problemDetails = new ProblemDetails(
+                type: '/docs/errors/unexpected-error',
+                title: 'An unexpected error occurred',
+                status: 500,
+                detail: 'An unexpected error occurred.'
+            );
+            return $this->responseFactory->createResponse($problemDetails);
         }
 
         return $this->responseFactory->createResponse(['status' => 'ok']);

@@ -62,8 +62,9 @@ final class AuthEmailCest
         $I->sendGET('/verify-email/invalid-token');
         $I->seeResponseCodeIs(HttpCode::UNPROCESSABLE_ENTITY);
         $I->seeResponseContainsJson([
-            'status' => 'failed',
-            'error_message' => 'Validation failed',
+            'title' => 'Invalid Verification Token',
+            'status' => HttpCode::UNPROCESSABLE_ENTITY,
+            'detail' => 'Invalid verification token.',
         ]);
     }
 
