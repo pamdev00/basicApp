@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace App\Auth;
 
 use Cycle\ORM\Select;
+use DateTimeImmutable;
 use Yiisoft\Data\Cycle\Writer\EntityWriter;
 
 final class CycleEmailVerificationTokenRepository extends Select\Repository implements EmailVerificationTokenRepositoryInterface
 {
     public function __construct(
         Select $select,
-        private EntityWriter $entityWriter,
+        private readonly EntityWriter $entityWriter,
     ) {
         parent::__construct($select);
     }
@@ -31,7 +32,7 @@ final class CycleEmailVerificationTokenRepository extends Select\Repository impl
         return $this
             ->select()
             ->where('usedAt', '!=', null)
-            ->orWhere('expiresAt', '<', new \DateTimeImmutable())
+            ->orWhere('expiresAt', '<', new DateTimeImmutable())
             ->fetchAll();
     }
 }

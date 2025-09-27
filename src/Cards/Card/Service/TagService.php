@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Cards\Card\Service;
 
-
-
 use App\Cards\Card\Entity\Tag;
 use App\Cards\Card\Repository\TagRepository;
 use Yiisoft\Data\Reader\DataReaderInterface;
@@ -13,8 +11,9 @@ use Yiisoft\Data\Reader\DataReaderInterface;
 class TagService
 {
     public function __construct(
-        private TagRepository $tagRepository
-    ) {}
+        private readonly TagRepository $tagRepository
+    ) {
+    }
 
     /**
      * Создание нового тега
@@ -122,7 +121,7 @@ class TagService
         $stats = $this->getUsageStats();
 
         // Сортируем по количеству использований
-        usort($stats, fn($a, $b) => $b['usage_count'] <=> $a['usage_count']);
+        usort($stats, fn ($a, $b) => $b['usage_count'] <=> $a['usage_count']);
 
         return array_slice($stats, 0, $limit);
     }
@@ -135,7 +134,7 @@ class TagService
         $tags = [];
 
         foreach ($tagNames as $name) {
-            $name = trim($name);
+            $name = trim((string) $name);
             if (!empty($name)) {
                 $tags[] = $this->findOrCreate($name);
             }

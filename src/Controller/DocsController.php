@@ -8,7 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Yiisoft\Router\HydratorAttribute\RouteArgument;
 use Yiisoft\Yii\View\Renderer\ViewRenderer;
 
-final class DocsController
+final readonly class DocsController
 {
     private ViewRenderer $viewRenderer;
 

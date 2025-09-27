@@ -16,7 +16,8 @@ use Ramsey\Uuid\UuidInterface;
 
 #[Entity(
     repository: ChecklistItemRepository::class,
-    scope: PublicScope::class)
+    scope: PublicScope::class
+)
 ]
 #[Behavior\CreatedAt(field: 'created_at', column: 'created_at')]
 #[Behavior\UpdatedAt(field: 'updated_at', column: 'updated_at')]
@@ -28,9 +29,6 @@ class ChecklistItem
     #[Column(type: 'uuid', primary: true)]
     private UuidInterface $id;
 
-    #[Column(type: 'text')]
-    private string $description = '';
-
     #[Column(type: 'bool', default: 'false', typecast: 'bool')]
     private bool $is_completed = false;
 
@@ -38,17 +36,17 @@ class ChecklistItem
     private ?Checklist $checklist = null;
 
     #[Column(type: 'datetime')]
-    private DateTimeImmutable $created_at;
+    private readonly DateTimeImmutable $created_at;
 
     #[Column(type: 'datetime')]
-    private DateTimeImmutable $updated_at;
+    private readonly DateTimeImmutable $updated_at;
 
     #[Column(type: 'datetime', nullable: true)]
     private ?DateTimeImmutable $deleted_at = null;
 
-    public function __construct(string $description = '')
+    public function __construct(#[Column(type: 'text')]
+    private string $description = '')
     {
-        $this->description = $description;
         $this->created_at = new DateTimeImmutable();
         $this->updated_at = new DateTimeImmutable();
     }

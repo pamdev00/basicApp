@@ -26,18 +26,15 @@ class Tag
         $this->id = $id;
     }
 
-    #[Column(type: 'string(100)')]
-    private string $name = '';
-
     /**
      * @var PivotedCollection<array-key, Card, CardTag>
      */
     #[ManyToMany(target: Card::class, though: CardTag::class)]
-    private PivotedCollection $cards;
+    private readonly PivotedCollection $cards;
 
-    public function __construct(string $name = '')
+    public function __construct(#[Column(type: 'string(100)')]
+    private string $name = '')
     {
-        $this->name = $name;
         $this->cards = new PivotedCollection();
     }
 

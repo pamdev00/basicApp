@@ -10,21 +10,15 @@ use Cycle\ORM\Factory;
 use Cycle\ORM\FactoryInterface;
 use Cycle\ORM\ORMInterface;
 
-/** @var array $params */
-
 return [
-    EmailVerificationTokenRepositoryInterface::class => static function (ORMInterface $orm) {
-        return $orm->getRepository(EmailVerificationToken::class);
-    },
+    EmailVerificationTokenRepositoryInterface::class => static fn (ORMInterface $orm) => $orm->getRepository(EmailVerificationToken::class),
 
     // Replace Factory definition to redefine default collection type
     // Todo: remove with https://github.com/yiisoft/yii-cycle/issues/111
-    FactoryInterface::class => static function (DatabaseManager $dbManager, Spiral\Core\FactoryInterface $factory) {
-        return new Factory(
-            $dbManager,
-            null,
-            $factory,
-            new DoctrineCollectionFactory()
-        );
-    },
+    FactoryInterface::class => static fn (DatabaseManager $dbManager, Spiral\Core\FactoryInterface $factory) => new Factory(
+        $dbManager,
+        null,
+        $factory,
+        new DoctrineCollectionFactory()
+    ),
 ];

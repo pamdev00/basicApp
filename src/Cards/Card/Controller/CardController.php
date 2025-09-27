@@ -16,6 +16,7 @@ use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface;
+use Throwable;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
 use Yiisoft\Http\Status;
 use Yiisoft\Input\Http\Attribute\Parameter\Query;
@@ -29,7 +30,8 @@ final readonly class CardController
         private CardService $cardService,
         private CardFormatter $cardFormatter,
         private CardBuilder $cardBuilder,
-    ) {}
+    ) {
+    }
 
     #[OA\Get(
         path: '/api/cards',
@@ -66,12 +68,13 @@ final readonly class CardController
             ),
         ]
     )]
-    public function index(PaginatorFormatter $paginatorFormatter,
+    public function index(
+        PaginatorFormatter $paginatorFormatter,
         ServerRequestInterface $request,
-        #[Query('page')] int $page = 1
-    ): Response
-    {
-        $paginator = $this->cardService->getAllPreloaded( page: $page, params: $request->getQueryParams());
+        #[Query('page')]
+        int $page = 1
+    ): Response {
+        $paginator = $this->cardService->getAllPreloaded(page: $page, params: $request->getQueryParams());
         $cards = [];
         foreach ($paginator->read() as $post) {
             $cards[] = $this->cardFormatter->format($post);
@@ -195,15 +198,10 @@ final readonly class CardController
                 'status' => $card->getStatus(),
                 'priority' => $card->getPriority(),
                 'updated_at' => $card->getUpdatedAt()->format('d.m.Y H:i:s'),
-                'tags' => array_map(static fn(Tag $tag) => $tag->getName(), $card->getTags()),
+                'tags' => array_map(static fn (Tag $tag) => $tag->getName(), $card->getTags()),
             ], Status::CREATED);
 
-        } catch (Exception $e) {
-            return $this->responseFactory->createResponse(
-                ['error' => $e->getMessage()],
-                Status::BAD_REQUEST
-            );
-        } catch (\Throwable $e) {
+        } catch (Exception|Throwable $e) {
             return $this->responseFactory->createResponse(
                 ['error' => $e->getMessage()],
                 Status::BAD_REQUEST
@@ -242,7 +240,7 @@ final readonly class CardController
         /** @var Card $card */
         $card = $this->cardService->getFullCard($id);
         try {
-            $card = $this->cardService->update($card,$cardRequest);
+            $card = $this->cardService->update($card, $cardRequest);
 
             return $this->responseFactory->createResponse([
                 'id' => $card->getId(),

@@ -28,43 +28,30 @@ class User implements IdentityInterface
     #[Column(type: 'string(128)')]
     private string $token;
 
-    #[Column(type: 'string(48)')]
-    private string $login;
-
     #[Column(type: 'string')]
     private string $passwordHash;
 
-    #[Column(type: 'string(100)', unique: true)]
-    private string $email;
-
     #[Column(type: 'integer', typecast: UserStatus::class, default: 1)]
-    private UserStatus $status;
+    private UserStatus $status = UserStatus::WAITING_VERIFICATION;
 
     #[Column(type: 'datetime', nullable: true)]
     private ?DateTimeImmutable $emailVerifiedAt = null;
 
-    #[Column(type: 'string(16)', default: 'en-US')]
-    private string $locale = 'en-US';
+    private readonly DateTimeImmutable $created_at;
 
-    #[Column(type: 'string(64)', default: 'UTC')]
-    private string $timezone = 'UTC';
-
-    private DateTimeImmutable $created_at;
-
-    private DateTimeImmutable $updated_at;
+    private readonly DateTimeImmutable $updated_at;
 
     public function __construct(
-        string $login,
+        #[Column(type: 'string(48)')]
+        private string $login,
         string $password,
-        string $email,
-        string $locale = 'en-US',
-        string $timezone = 'UTC'
+        #[Column(type: 'string(100)', unique: true)]
+        private readonly string $email,
+        #[Column(type: 'string(16)', default: 'en-US')]
+        private readonly string $locale = 'en-US',
+        #[Column(type: 'string(64)', default: 'UTC')]
+        private readonly string $timezone = 'UTC'
     ) {
-        $this->login = $login;
-        $this->email = $email;
-        $this->locale = $locale;
-        $this->timezone = $timezone;
-        $this->status = UserStatus::WAITING_VERIFICATION;
         $this->created_at = new DateTimeImmutable();
         $this->updated_at = new DateTimeImmutable();
         $this->setPassword($password);
@@ -73,7 +60,7 @@ class User implements IdentityInterface
 
     public function getId(): ?string
     {
-        return $this->id === null ? null : (string) $this->id;
+        return $this->id === null ? null : (string)$this->id;
     }
 
     public function getEmail(): string

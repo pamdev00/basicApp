@@ -14,26 +14,12 @@ use Yiisoft\Router\HydratorAttribute\RouteArgument;
 
 #[OA\Tag(name: 'blog', description: 'Blog')]
 #[OA\Parameter(parameter: 'PageRequest', name: 'page', in: 'query', schema: new OA\Schema(type: 'int', example: '2'))]
-final class BlogController
+final readonly class BlogController
 {
-    private DataResponseFactoryInterface $responseFactory;
     private PostRepository $postRepository;
-    private PostFormatter $postFormatter;
-    private PostBuilder $postBuilder;
-    private BlogService $blogService;
-
-    public function __construct(
-        PostRepository $postRepository,
-        DataResponseFactoryInterface $responseFactory,
-        PostFormatter $postFormatter,
-        PostBuilder $postBuilder,
-        BlogService $blogService
-    ) {
+    public function __construct( PostRepository $postRepository, private DataResponseFactoryInterface $responseFactory, private PostFormatter $postFormatter, private PostBuilder $postBuilder, private BlogService $blogService)
+    {
         $this->postRepository = $postRepository;
-        $this->responseFactory = $responseFactory;
-        $this->postFormatter = $postFormatter;
-        $this->postBuilder = $postBuilder;
-        $this->blogService = $blogService;
     }
 
     #[OA\Get(

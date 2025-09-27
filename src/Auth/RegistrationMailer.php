@@ -19,7 +19,7 @@ final readonly class RegistrationMailer implements RegistrationMailerInterface
 
     public function send(string $to, string $subject, string $htmlBody): void
     {
-        $this->logger->info('Mailer class: ' . get_class($this->mailer));
+        $this->logger->info('Mailer class: ' . $this->mailer::class);
 
         $message = (new Message())
             ->withFrom($this->senderEmail)

@@ -10,7 +10,6 @@ use Cycle\Schema\Provider\SimpleCacheSchemaProvider;
 use Yiisoft\ErrorHandler\Middleware\ErrorCatcher;
 use Yiisoft\Queue\Adapter\SynchronousAdapter;
 use Yiisoft\Router\Middleware\Router;
-use Yiisoft\Yii\Cycle\Schema\Conveyor\AttributedSchemaConveyor;
 use Yiisoft\Yii\Cycle\Schema\Provider\FromConveyorSchemaProvider;
 use Yiisoft\Yii\Cycle\Schema\SchemaProviderInterface;
 use Yiisoft\Yii\Middleware\Locale;

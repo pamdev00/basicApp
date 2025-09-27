@@ -27,7 +27,7 @@ use Yiisoft\Validator\RulesProviderInterface;
     ],
     type: 'object'
 )]
-final  class CreateChecklistRequest  extends AbstractInput implements RulesProviderInterface
+final class CreateChecklistRequest extends AbstractInput implements RulesProviderInterface
 {
     #[Body('title')]
     #[Validate(new Required())]
@@ -47,4 +47,3 @@ final  class CreateChecklistRequest  extends AbstractInput implements RulesProvi
         ];
     }
 }
-

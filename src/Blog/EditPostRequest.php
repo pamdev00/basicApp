@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Blog;
 
+use OpenApi\Attributes as OA;
 use Yiisoft\Hydrator\Validator\Attribute\Validate;
 use Yiisoft\Input\Http\AbstractInput;
 use Yiisoft\Input\Http\Attribute\Parameter\Body;
@@ -12,7 +13,6 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RulesProviderInterface;
-use OpenApi\Attributes as OA;
 
 #[OA\Schema(
     schema: 'EditPostRequest',
@@ -25,7 +25,7 @@ use OpenApi\Attributes as OA;
 final class EditPostRequest extends AbstractInput implements RulesProviderInterface
 {
     #[RouteArgument('id')]
-    private int $id;
+    private readonly int $id;
 
     #[Body('title')]
     #[Validate(new Required())]
@@ -37,7 +37,7 @@ final class EditPostRequest extends AbstractInput implements RulesProviderInterf
 
     #[Body('status')]
     #[Validate(new Required())]
-    private int $status;
+    private readonly int $status;
 
     public function getId(): int
     {
@@ -71,7 +71,9 @@ final class EditPostRequest extends AbstractInput implements RulesProviderInterf
             'status' => [
                 static function ($value): Result {
                     $result = new Result();
-                    if (!PostStatus::isValid($value)) {
+                    try {
+                        PostStatus::from($value);
+                    } catch (\Throwable) {
                         $result->addError('Incorrect status');
                     }
 

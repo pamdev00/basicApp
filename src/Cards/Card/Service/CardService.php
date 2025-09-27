@@ -19,7 +19,8 @@ class CardService
     public function __construct(
         private readonly CardRepository $cardRepository,
         private readonly TagRepository $tagRepository,
-    ) {}
+    ) {
+    }
 
     /**
      * Создание новой карточки
@@ -104,4 +105,3 @@ class CardService
             ->withCurrentPage($page);
     }
 }
-

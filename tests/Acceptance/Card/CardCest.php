@@ -49,7 +49,7 @@ final class CardCest
 
         $cardId = CardHelper::createCard($I, [
             'title' => 'My New Card',
-            'tags' => ['Учеба', 'Работа']
+            'tags' => ['Учеба', 'Работа'],
         ]);
 
         Assert::assertNotEmpty($cardId);
@@ -63,8 +63,8 @@ final class CardCest
                 'description' => 'Test desc',
                 'status' => 'todo',
                 'priority' => 'medium',
-                'tags' => ['Учеба', 'Работа']
-            ]
+                'tags' => ['Учеба', 'Работа'],
+            ],
         ]);
 
         $I->seeInDatabase('card', [
@@ -158,15 +158,15 @@ final class CardCest
             'status' => HttpCode::UNPROCESSABLE_ENTITY,
             'errors' => [
                 'title' => ['Title cannot be blank.'],
-                'description' => ['Description cannot be blank.']
-            ]
+                'description' => ['Description cannot be blank.'],
+            ],
         ]);
     }
 
     public function createCardWithEmptyTitle(AcceptanceTester $I): void
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST('api/cards',[
+        $I->sendPOST('api/cards', [
             'title' => '',
         ]);
 
@@ -177,16 +177,16 @@ final class CardCest
             'errors' => [
                 'title' => ['Title cannot be blank.'],
                 'description' => ['Description not passed.'],
-            ]
+            ],
         ]);
     }
 
     public function createCardWithTooLongTitle(AcceptanceTester $I): void
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendPOST('api/cards',[
+        $I->sendPOST('api/cards', [
             'title' => str_repeat('A', 5024),
-            'description' => str_repeat('A', 800)
+            'description' => str_repeat('A', 800),
         ]);
 
 
@@ -197,7 +197,7 @@ final class CardCest
             'errors' => [
                 'title' => ['Title must contain at most 255 characters.'],
                 'status' => ['Status must be a string. null given.'],
-            ]
+            ],
         ]);
     }
 

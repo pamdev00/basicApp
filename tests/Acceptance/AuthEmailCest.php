@@ -47,7 +47,7 @@ final class AuthEmailCest
         $I->assertNotNull($token, 'Token not found in email');
 
         // 5. Send verification request
-        $I->sendGET('/verify-email/'. $token);
+        $I->sendGET('/verify-email/' . $token);
 
         // 6. Assert success
         $I->seeResponseCodeIs(HttpCode::OK);

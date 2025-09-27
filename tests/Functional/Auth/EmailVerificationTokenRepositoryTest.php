@@ -91,7 +91,7 @@ final class EmailVerificationTokenRepositoryTest extends TestCase
         // Token 3: Valid
         $validToken = new EmailVerificationToken(hash('sha256', 'valid'), $now->modify('+1 day'), $this->user);
         $this->tokenRepository->save($validToken);
-        
+
         $this->entityManager->run();
 
         // 3. Find expired or used tokens

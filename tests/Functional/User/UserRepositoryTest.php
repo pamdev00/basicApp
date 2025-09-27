@@ -6,9 +6,9 @@ namespace App\Tests\Functional\User;
 
 use App\User\User;
 use App\User\UserRepositoryInterface;
+use Cycle\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Testing\FunctionalTester;
-use Cycle\ORM\EntityManagerInterface;
 
 final class UserRepositoryTest extends TestCase
 {

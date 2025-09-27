@@ -5,19 +5,20 @@ declare(strict_types=1);
 namespace App\Formatter;
 
 use App\Dto\ProblemDetails;
+use InvalidArgumentException;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Yiisoft\DataResponse\DataResponse;
 use Yiisoft\DataResponse\DataResponseFormatterInterface;
 
-final class ProblemDetailsFormatter implements DataResponseFormatterInterface
+final readonly class ProblemDetailsFormatter implements DataResponseFormatterInterface
 {
-    private const CONTENT_TYPE = 'application/problem+json';
+    private const string CONTENT_TYPE = 'application/problem+json';
 
     public function __construct(
-        private readonly ResponseFactoryInterface $responseFactory,
-        private readonly StreamFactoryInterface $streamFactory
+        private ResponseFactoryInterface $responseFactory,
+        private StreamFactoryInterface $streamFactory
     ) {
     }
 
@@ -25,9 +26,10 @@ final class ProblemDetailsFormatter implements DataResponseFormatterInterface
     {
         $data = $dataResponse->getData();
         if (!$data instanceof ProblemDetails) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
-                    'The data must be an instance of %s.', ProblemDetails::class
+                    'The data must be an instance of %s.',
+                    ProblemDetails::class
                 )
             );
         }

@@ -17,17 +17,14 @@ class CardTag
     #[Column(type: 'uuid', primary: true)]
     private ?UuidInterface $id = null;
 
-    #[BelongsTo(target: Card::class, nullable: false)]
-    private ?Card $card = null;
 
-    #[BelongsTo(target: Tag::class, nullable: false)]
-    private ?Tag $tag = null;
-
-
-    public function __construct(Card $card, Tag $tag)
+    public function __construct(
+        #[BelongsTo(target: Card::class, nullable: false)]
+        private ?Card $card,
+        #[BelongsTo(target: Tag::class, nullable: false)]
+        private ?Tag $tag
+    )
     {
-        $this->card = $card;
-        $this->tag = $tag;
     }
     public function getId(): ?UuidInterface
     {

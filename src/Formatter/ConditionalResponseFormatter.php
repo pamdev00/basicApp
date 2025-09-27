@@ -9,11 +9,11 @@ use Psr\Http\Message\ResponseInterface;
 use Yiisoft\DataResponse\DataResponse;
 use Yiisoft\DataResponse\DataResponseFormatterInterface;
 
-final class ConditionalResponseFormatter implements DataResponseFormatterInterface
+final readonly class ConditionalResponseFormatter implements DataResponseFormatterInterface
 {
     public function __construct(
-        private readonly ApiResponseFormatter $apiResponseFormatter,
-        private readonly ProblemDetailsFormatter $problemDetailsFormatter
+        private ApiResponseFormatter $apiResponseFormatter,
+        private ProblemDetailsFormatter $problemDetailsFormatter
     ) {
     }
 

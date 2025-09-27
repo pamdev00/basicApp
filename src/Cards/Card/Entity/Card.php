@@ -36,12 +36,6 @@ class Card
         $this->id = $id;
     }
 
-    #[Column(type: 'string(255)')]
-    private string $title;
-
-    #[Column(type: 'text', nullable: true)]
-    private ?string $description = null;
-
     #[Column(type: 'string(50)', default: 'todo')]
     private string $status = 'todo';
 
@@ -52,17 +46,17 @@ class Card
     private ?DateTimeImmutable $due_date = null;
 
     #[Column(type: 'datetime')]
-    private DateTimeImmutable $created_at;
+    private readonly DateTimeImmutable $created_at;
 
     #[Column(type: 'datetime')]
-    private DateTimeImmutable $updated_at;
+    private readonly DateTimeImmutable $updated_at;
 
     #[Column(type: 'datetime', nullable: true)]
     private ?DateTimeImmutable $deleted_at = null;
 
-//    #[BelongsTo(target: User::class, nullable: false)]
-//    private ?User $user = null;
-//    private ?string $user_id = null;
+    //    #[BelongsTo(target: User::class, nullable: false)]
+    //    private ?User $user = null;
+    //    private ?string $user_id = null;
 
     #[Cycle\HasMany(
         target: CardTag::class,
@@ -70,17 +64,17 @@ class Card
         outerKey: 'card_id',
         fkAction: 'CASCADE'
     )]
-    private Collection $cardTags;
+    private readonly Collection $cardTags;
 
     /**
      * @var Collection<array-key, Checklist>
      */
     #[HasMany(target: Checklist::class, fkAction: 'CASCADE')]
-    private Collection $checklists;
-    public function __construct(string $title = '', ?string $description = null)
+    private readonly Collection $checklists;
+    public function __construct(#[Column(type: 'string(255)')]
+    private string $title = '', #[Column(type: 'text', nullable: true)]
+    private ?string $description = null)
     {
-        $this->title = $title;
-        $this->description = $description;
         $this->created_at = new DateTimeImmutable();
         $this->updated_at = new DateTimeImmutable();
 
@@ -159,15 +153,15 @@ class Card
         return $this->deleted_at;
     }
 
-//    public function setUser(User $user): void
-//    {
-//        $this->user = $user;
-//    }
-//
-//    public function getUser(): ?User
-//    {
-//        return $this->user;
-//    }
+    //    public function setUser(User $user): void
+    //    {
+    //        $this->user = $user;
+    //    }
+    //
+    //    public function getUser(): ?User
+    //    {
+    //        return $this->user;
+    //    }
 
 
     public function isNewRecord(): bool
@@ -200,7 +194,7 @@ class Card
     public function getTags(): array
     {
         return array_map(
-            static fn(CardTag $cardTag) => $cardTag->getTag(),
+            static fn (CardTag $cardTag) => $cardTag->getTag(),
             $this->cardTags->toArray()
         );
     }

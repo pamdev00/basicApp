@@ -16,7 +16,8 @@ final readonly class ChecklistService
     public function __construct(
         private ChecklistRepository $checklistRepository,
         private EntityManagerInterface $entityManager,
-    ) {}
+    ) {
+    }
 
     public function getFullChecklist(string $id): ?Checklist
     {

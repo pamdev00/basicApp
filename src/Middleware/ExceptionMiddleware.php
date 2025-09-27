@@ -10,18 +10,16 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Throwable;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
 use Yiisoft\Http\Status;
 use Yiisoft\Input\Http\InputValidationException;
 use Yiisoft\Validator\Error;
 
-final class ExceptionMiddleware implements MiddlewareInterface
+final readonly class ExceptionMiddleware implements MiddlewareInterface
 {
-    private DataResponseFactoryInterface $dataResponseFactory;
-
-    public function __construct(DataResponseFactoryInterface $dataResponseFactory)
+    public function __construct(private DataResponseFactoryInterface $dataResponseFactory)
     {
-        $this->dataResponseFactory = $dataResponseFactory;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -53,7 +51,7 @@ final class ExceptionMiddleware implements MiddlewareInterface
             ))->withData(['errors' => $errors]);
 
             return $this->dataResponseFactory->createResponse($problemDetails);
-        } catch (\Throwable $e) {
+        } catch (Throwable) {
             $problemDetails = new ProblemDetails(
                 type: '/docs/errors/unexpected-error',
                 title: 'An unexpected error occurred',

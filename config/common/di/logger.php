@@ -7,8 +7,6 @@ use Yiisoft\Definitions\ReferencesArray;
 use Yiisoft\Log\Logger;
 use Yiisoft\Log\Target\File\FileTarget;
 
-/** @var array $params */
-
 return [
     LoggerInterface::class => [
         'class' => Logger::class,

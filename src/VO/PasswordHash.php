@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\VO;
 
-final readonly class PasswordHash
+final readonly class PasswordHash implements \Stringable
 {
     private function __construct(private string $value)
     {

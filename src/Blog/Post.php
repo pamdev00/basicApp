@@ -30,14 +30,13 @@ class Post
     private string $content;
 
     #[Column(type: 'datetime')]
-    private DateTimeImmutable $created_at;
+    private readonly DateTimeImmutable $created_at;
 
     #[Column(type: 'datetime')]
-    private DateTimeImmutable $updated_at;
+    private readonly DateTimeImmutable $updated_at;
 
     #[BelongsTo(target: User::class, nullable: false)]
     private ?User $user = null;
-    private ?int $user_id = null;
 
     public function __construct()
     {
@@ -83,7 +82,7 @@ class Post
 
     public function setStatus(PostStatus $status): void
     {
-        $this->status = $status->getValue();
+        $this->status = $status->value;
     }
 
     public function getCreatedAt(): DateTimeImmutable

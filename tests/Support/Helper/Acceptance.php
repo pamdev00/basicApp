@@ -26,7 +26,7 @@ class Acceptance extends Module
      */
     public function grabLatestEmailContent(string $mailDir): string
     {
-        $files = glob( __DIR__ .'/../../../' . $mailDir . '/*.eml');
+        $files = glob(__DIR__ . '/../../../' . $mailDir . '/*.eml');
         if (!$files) {
             throw new Exception('No email files found.');
         }

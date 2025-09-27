@@ -3,17 +3,15 @@
 declare(strict_types=1);
 
 
+use Psr\Http\Message\ResponseFactoryInterface;
 use Yiisoft\Aliases\Aliases;
 use Yiisoft\Cache\File\FileCache;
+use Yiisoft\Definitions\Reference;
 use Yiisoft\Yii\RateLimiter\Counter;
 use Yiisoft\Yii\RateLimiter\CounterInterface;
+use Yiisoft\Yii\RateLimiter\LimitRequestsMiddleware;
 use Yiisoft\Yii\RateLimiter\Storage\SimpleCacheStorage;
 use Yiisoft\Yii\RateLimiter\Storage\StorageInterface;
-use Yiisoft\Yii\RateLimiter\LimitRequestsMiddleware;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Yiisoft\Definitions\Reference;
-
-/** @var array $params */
 
 return [
     StorageInterface::class => function (Aliases $aliases) {

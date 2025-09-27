@@ -96,7 +96,7 @@ final class ChecklistRepository extends Select\Repository
             $items = $checklist->getItems();
             $totalItems += count($items);
 
-            $checklistCompletedItems = array_filter($items, fn($item) => $item->isCompleted());
+            $checklistCompletedItems = array_filter($items, fn ($item) => $item->isCompleted());
             $completedItems += count($checklistCompletedItems);
 
             // Checklist is considered completed if all its items are completed
@@ -128,13 +128,13 @@ final class ChecklistRepository extends Select\Repository
         return $this->prepareDataReader($query);
     }
 
-//    public function findById(string $id): ?Checklist
-//    {
-//        return $this
-//            ->select()
-//            ->where(['id' => $id])
-//            ->fetchOne();
-//    }
+    //    public function findById(string $id): ?Checklist
+    //    {
+    //        return $this
+    //            ->select()
+    //            ->where(['id' => $id])
+    //            ->fetchOne();
+    //    }
 
     /**
      * @throws Throwable

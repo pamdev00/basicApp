@@ -33,7 +33,7 @@ return [
             '__construct()' => [
                 'messageSettings' =>  new MessageSettings(htmlToTextBodyConverter: new HtmlToTextBodyConverter()),
                 'path' => DynamicReference::to(
-                    static fn(Aliases $aliases) => $aliases->get('@runtime/mail')
+                    static fn (Aliases $aliases) => $aliases->get('@runtime/mail')
                 ),
             ],
         ],

@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace App\Cards\Card\Entity;
 
-
 use App\Cards\Card\Repository\ChecklistRepository;
 use App\Cards\Card\Scope\PublicScope;
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Relation\BelongsTo;
 use Cycle\Annotated\Annotation\Relation\HasMany;
+use Cycle\ORM\Entity\Behavior;
 use Cycle\ORM\Entity\Behavior\Uuid\Uuid7;
 use DateTimeImmutable;
-use Cycle\ORM\Entity\Behavior;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
 
 #[Entity(
     repository: ChecklistRepository::class,
-    scope: PublicScope::class)
+    scope: PublicScope::class
+)
 ]
 #[Behavior\CreatedAt(field: 'created_at', column: 'created_at')]
 #[Behavior\UpdatedAt(field: 'updated_at', column: 'updated_at')]
@@ -32,9 +32,6 @@ class Checklist
 {
     #[Column(type: 'uuid', primary: true)]
     private UuidInterface $id;
-
-    #[Column(type: 'string(255)')]
-    private string $title;
 
     #[Column(type: 'datetime', nullable: true)]
     private ?DateTimeImmutable $deleted_at = null;
@@ -53,11 +50,11 @@ class Checklist
      * @var Collection<array-key, ChecklistItem>
      */
     #[HasMany(target: ChecklistItem::class, fkAction: 'CASCADE')]
-    private Collection $items;
+    private readonly Collection $items;
 
-    public function __construct(string $title = '')
+    public function __construct(#[Column(type: 'string(255)')]
+    private string $title = '')
     {
-        $this->title = $title;
         $this->items = new ArrayCollection();
     }
 
@@ -115,7 +112,7 @@ class Checklist
 
     public function getCompletedItemsCount(): int
     {
-        return count(array_filter($this->getItems(), static fn(ChecklistItem $item) => $item->isCompleted()));
+        return count(array_filter($this->getItems(), static fn (ChecklistItem $item) => $item->isCompleted()));
     }
 
     public function getTotalItemsCount(): int

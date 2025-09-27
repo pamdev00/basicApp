@@ -14,7 +14,6 @@ use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface as Response;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
 use Yiisoft\Http\Status;
-use Yiisoft\Input\Http\Attribute\Parameter\Body;
 use Yiisoft\Router\HydratorAttribute\RouteArgument;
 
 #[OA\Tag(name: 'checklist', description: 'Checklist management')]
@@ -91,7 +90,7 @@ final readonly class ChecklistController
         return $this->responseFactory->createResponse([
             'data' => [
                 'checklists' => $checklists,
-            ]
+            ],
         ]);
     }
 
@@ -152,7 +151,7 @@ final readonly class ChecklistController
         return $this->responseFactory->createResponse([
             'data' => [
                 'checklist' => $this->checklistFormatter->formatDetailed($checklist),
-            ]
+            ],
         ]);
     }
 
@@ -207,7 +206,8 @@ final readonly class ChecklistController
         ]
     )]
     public function create(
-        #[RouteArgument('cardId')] string $cardId,
+        #[RouteArgument('cardId')]
+        string $cardId,
         CreateChecklistRequest $request
     ): Response {
         $card = $this->cardService->getFullCard($cardId);
@@ -286,7 +286,8 @@ final readonly class ChecklistController
         ]
     )]
     public function update(
-        #[RouteArgument('id')] string $id,
+        #[RouteArgument('id')]
+        string $id,
         UpdateChecklistRequest $request
     ): Response {
         $checklist = $this->checklistService->getFullChecklist($id);

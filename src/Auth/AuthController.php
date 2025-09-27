@@ -7,18 +7,15 @@ namespace App\Auth;
 use App\Auth\Exception\InvalidTokenException;
 use App\Auth\Exception\TokenExpiredException;
 use App\Auth\Exception\TokenUsedException;
+use App\Dto\ProblemDetails;
 use App\User\UserRequest;
 use App\User\UserService;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Yiisoft\DataResponse\DataResponseFactoryInterface as ResponseFactory;
 use Yiisoft\Router\HydratorAttribute\RouteArgument;
 use Yiisoft\Validator\ValidatorInterface;
-use App\Auth\ResendVerificationService;
-use App\Dto\ProblemDetails;
-use App\Auth\ResendRequest;
 
 #[OA\Tag(name: 'auth', description: 'Authentication')]
 #[OA\SecurityScheme(securityScheme: 'ApiKey', type: 'apiKey', name: 'X-Api-Key', in: 'header')]
@@ -64,15 +61,16 @@ final readonly class AuthController
                 response: '409',
                 description: 'Conflict - user with this email already exists',
                 content: new OA\JsonContent(ref: '#/components/schemas/ProblemDetails')
-            )
+            ),
         ]
     )]
     public function register(RegisterRequest $request): ResponseInterface
     {
         $result = $this->validator->validate($request);
         if (!$result->isValid()) {
-           return $this->responseFactory->createResponse(
-                $result,422
+            return $this->responseFactory->createResponse(
+                $result,
+                422
             );
         }
 
@@ -182,6 +180,7 @@ final readonly class AuthController
         path: '/verify-email/{token}',
         description: 'Verify user email with a token from the verification email',
         summary: 'Verify user email',
+        tags: ['auth'],
         parameters: [
             new OA\Parameter(
                 name: 'token',
@@ -189,16 +188,15 @@ final readonly class AuthController
                 required: true,
                 description: 'The verification token',
                 schema: new OA\Schema(type: 'string')
-            )
+            ),
         ],
-        tags: ['auth'],
         responses: [
             new OA\Response(
                 response: '200',
                 description: 'Email successfully verified',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'status', type: 'string', example: 'ok')
+                        new OA\Property(property: 'status', type: 'string', example: 'ok'),
                     ],
                     type: 'object'
                 )
@@ -212,7 +210,7 @@ final readonly class AuthController
                 response: '500',
                 description: 'Internal server error',
                 content: new OA\JsonContent(ref: '#/components/schemas/ProblemDetails')
-            )
+            ),
         ]
     )]
     public function verifyEmail(#[RouteArgument('token')] string $token): ResponseInterface
@@ -227,7 +225,7 @@ final readonly class AuthController
                 detail: $e->getMessage()
             );
             return $this->responseFactory->createResponse($problemDetails);
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             $problemDetails = new ProblemDetails(
                 type: '/docs/errors/unexpected-error',
                 title: 'An unexpected error occurred',

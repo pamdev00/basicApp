@@ -10,10 +10,10 @@ use App\Queue\UserLoggedInMessage;
 use Yiisoft\Auth\IdentityInterface;
 use Yiisoft\Auth\IdentityRepositoryInterface;
 use Yiisoft\Definitions\Exception\InvalidConfigException;
-use Yiisoft\User\CurrentUser;
 use Yiisoft\Queue\QueueFactoryInterface;
+use Yiisoft\User\CurrentUser;
 
-final class UserService
+final readonly class UserService
 {
     public function __construct(
         private CurrentUser $currentUser,
@@ -23,13 +23,10 @@ final class UserService
     }
 
     /**
-     * @param string $login
-     * @param string $password
      *
      * @throws InvalidConfigException
      * @throws BadRequestException
      *
-     * @return IdentityInterface
      */
     public function login(string $login, string $password): IdentityInterface
     {

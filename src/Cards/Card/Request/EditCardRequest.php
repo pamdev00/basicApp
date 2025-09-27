@@ -10,10 +10,8 @@ use Yiisoft\Input\Http\AbstractInput;
 use Yiisoft\Input\Http\Attribute\Parameter\Body;
 use Yiisoft\Router\HydratorAttribute\RouteArgument;
 use Yiisoft\Validator\Rule\Each;
-use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\Rule\Type\IntegerType;
 use Yiisoft\Validator\Rule\Type\StringType;
 use Yiisoft\Validator\RulesProviderInterface;
 
@@ -23,14 +21,14 @@ use Yiisoft\Validator\RulesProviderInterface;
         new OA\Property(property: 'title', type: 'string', example: 'Title card'),
         new OA\Property(property: 'description', type: 'string', example: 'Text card'),
         new OA\Property(property: 'status', type: 'string', example: 'todo'),
-        new OA\Property(property: 'priority', type: 'string',enum: ["hot", "high", "low"], example: 'medium'),
-        new OA\Property(property: 'tags', type: 'string',enum: ["Работа", "Личное", "Учеба"]),
+        new OA\Property(property: 'priority', type: 'string', enum: ["hot", "high", "low"], example: 'medium'),
+        new OA\Property(property: 'tags', type: 'string', enum: ["Работа", "Личное", "Учеба"]),
     ]
 )]
 final class EditCardRequest extends AbstractInput implements RulesProviderInterface
 {
     #[RouteArgument('id')]
-    private string $id;
+    private readonly string $id;
 
     #[Body('title')]
     #[Validate(new Required())]
@@ -49,7 +47,8 @@ final class EditCardRequest extends AbstractInput implements RulesProviderInterf
     #[Body('tags')]
     #[Validate(
         new Each(
-            [new StringType()], skipOnEmpty: true
+            [new StringType()],
+            skipOnEmpty: true
         )
     )]
     private array $tags = [];

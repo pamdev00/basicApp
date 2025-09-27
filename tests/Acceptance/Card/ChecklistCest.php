@@ -8,12 +8,11 @@ use App\Tests\Support\AcceptanceTester;
 use App\Tests\Support\Helper\CardHelper;
 use App\Tests\Support\Helper\ChecklistHelper;
 use Codeception\Util\HttpCode;
+use JsonException;
 use PHPUnit\Framework\Assert;
 
 final class ChecklistCest
 {
-
-
     public function getChecklistList(AcceptanceTester $I): void
     {
         $cardId = CardHelper::createCard($I);
@@ -91,7 +90,7 @@ final class ChecklistCest
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function createChecklistWithEmptyTitle(AcceptanceTester $I): void
     {
@@ -108,13 +107,13 @@ final class ChecklistCest
             'status' => HttpCode::UNPROCESSABLE_ENTITY,
             'detail' => 'One or more validation errors occurred.',
             'errors' => [
-                'title' => ['Title cannot be blank.']
-            ]
+                'title' => ['Title cannot be blank.'],
+            ],
         ]);
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function createChecklistWithTooLongTitle(AcceptanceTester $I): void
     {
@@ -131,13 +130,13 @@ final class ChecklistCest
             'status' => HttpCode::UNPROCESSABLE_ENTITY,
             'detail' => 'One or more validation errors occurred.',
             'errors' => [
-                'title' => ['Title must contain at most 255 characters.']
-            ]
+                'title' => ['Title must contain at most 255 characters.'],
+            ],
         ]);
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function createChecklistWithSqlInjection(AcceptanceTester $I): void
     {
