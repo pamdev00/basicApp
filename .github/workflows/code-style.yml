@@ -3,9 +3,11 @@ on:
   push:
     branches:
       - main
+
   pull_request:
     branches:
       - main
+
 
 jobs:
   code_style:
@@ -45,6 +47,7 @@ jobs:
 
       - name: Run PHP-CS-Fixer
         run: composer run-script cs-fix-apply
+
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
