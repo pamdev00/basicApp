@@ -16,7 +16,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
 use Yiisoft\Http\Status;
-use Yiisoft\Input\Http\Attribute\Parameter\Query;
 use Yiisoft\Router\HydratorAttribute\RouteArgument;
 
 #[OA\Tag(name: 'checklist-item', description: 'Checklist item management')]

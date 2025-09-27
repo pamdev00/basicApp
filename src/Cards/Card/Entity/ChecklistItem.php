@@ -45,7 +45,7 @@ class ChecklistItem
     private ?DateTimeImmutable $deleted_at = null;
 
     public function __construct(#[Column(type: 'text')]
-    private string $description = '')
+        private string $description = '')
     {
         $this->created_at = new DateTimeImmutable();
         $this->updated_at = new DateTimeImmutable();

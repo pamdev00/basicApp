@@ -27,23 +27,23 @@ final class BlogCest
         );
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->seeResponseIsJson();
-//        $I->seeResponseContainsJson(
-//            [
-//                'status' => 'success',
-//                'error_message' => '',
-//                'error_code' => null,
-//                'data' => null,
-//            ]
-//        );
+        //        $I->seeResponseContainsJson(
+        //            [
+        //                'status' => 'success',
+        //                'error_message' => '',
+        //                'error_code' => null,
+        //                'data' => null,
+        //            ]
+        //        );
 
-//        $I->seeInDatabase(
-//            'post',
-//            [
-//                'title' => 'test title',
-//                'content' => 'test text',
-//                'status' => 0,
-//            ]
-//        );
+        //        $I->seeInDatabase(
+        //            'post',
+        //            [
+        //                'title' => 'test title',
+        //                'content' => 'test text',
+        //                'status' => 0,
+        //            ]
+        //        );
     }
 
     public function createBadParams(AcceptanceTester $I): void

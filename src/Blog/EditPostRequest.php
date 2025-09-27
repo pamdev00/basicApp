@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Blog;
 
 use OpenApi\Attributes as OA;
+use Throwable;
 use Yiisoft\Hydrator\Validator\Attribute\Validate;
 use Yiisoft\Input\Http\AbstractInput;
 use Yiisoft\Input\Http\Attribute\Parameter\Body;
@@ -73,7 +74,7 @@ final class EditPostRequest extends AbstractInput implements RulesProviderInterf
                     $result = new Result();
                     try {
                         PostStatus::from($value);
-                    } catch (\Throwable) {
+                    } catch (Throwable) {
                         $result->addError('Incorrect status');
                     }
 

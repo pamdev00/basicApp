@@ -11,7 +11,7 @@ use Yiisoft\Input\Http\RequestInputInterface;
 final readonly class UserRequest implements RequestInputInterface
 {
     #[Request(Authentication::class)]
-    
+
     private User $user;
 
     public function getUser(): User

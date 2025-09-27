@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\User;
 
-use Cycle\ORM\ORMInterface;
 use Cycle\ORM\Select;
 use Yiisoft\Auth\IdentityInterface;
 use Yiisoft\Data\Cycle\Reader\EntityReader;

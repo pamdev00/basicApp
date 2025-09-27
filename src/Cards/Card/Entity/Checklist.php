@@ -53,7 +53,7 @@ class Checklist
     private readonly Collection $items;
 
     public function __construct(#[Column(type: 'string(255)')]
-    private string $title = '')
+        private string $title = '')
     {
         $this->items = new ArrayCollection();
     }
