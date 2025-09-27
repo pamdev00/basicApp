@@ -86,32 +86,25 @@ return [
                 ->middleware(RequestCatcherMiddleware::class)
                 ->action([CardController::class, 'index'])
                 ->name('card/index'),
-
             Route::get('/cards/{id:[a-f0-9\-]{36}}')
                 ->middleware(RequestCatcherMiddleware::class)
                 ->action([CardController::class, 'view'])
                 ->name('card/view'),
-
             Route::put('/cards/{id:[a-f0-9\-]{36}}')
                 ->middleware(RequestCatcherMiddleware::class)
                 ->action([CardController::class, 'update'])
                 ->name('card/update'),
-
             Route::delete('/cards/{id:[a-f0-9\-]{36}}')
                 ->middleware(RequestCatcherMiddleware::class)
                 ->action([CardController::class, 'delete'])
                 ->name('card/delete'),
-
             Route::post('/cards')
                 ->middleware(RequestCatcherMiddleware::class)
                 ->action([CardController::class, 'create'])
                 ->name('card/create'),
-
-
             Route::get('/cards/{cardId}/checklists')
                 ->action([ChecklistController::class, 'index'])
                 ->name('checklists/index'),
-
             Route::post('/cards/{cardId}/checklists')
                 ->middleware(RequestCatcherMiddleware::class)
                 ->action([ChecklistController::class, 'create'])
@@ -121,12 +114,10 @@ return [
             Route::get('/checklists/{id:[a-f0-9\-]{36}}')
                 ->action([ChecklistController::class, 'view'])
                 ->name('checklists/view'),
-
             Route::put('/checklists/{id:[a-f0-9\-]{36}}')
                 ->middleware(RequestCatcherMiddleware::class)
                 ->action([ChecklistController::class, 'update'])
                 ->name('checklists/update'),
-
             Route::delete('/checklists/{id:[a-f0-9\-]{36}}')
                 ->middleware(RequestCatcherMiddleware::class)
                 ->action([ChecklistController::class, 'delete'])
@@ -137,16 +128,13 @@ return [
                 ->middleware(RequestCatcherMiddleware::class)
                 ->action([ChecklistItemController::class, 'create'])
                 ->name('checklist-items/create'),
-
             Route::put('/checklist-items/{id:[a-f0-9\-]{36}}')
                 ->middleware(RequestCatcherMiddleware::class)
                 ->action([ChecklistItemController::class, 'update'])
                 ->name('checklist-items/update'),
-
             Route::patch('/checklist-items/{id:[a-f0-9\-]{36}}/toggle')
                 ->action([ChecklistItemController::class, 'toggle'])
                 ->name('checklist-items/toggle'),
-
             Route::delete('/checklist-items/{id:[a-f0-9\-]{36}}')
                 ->middleware(RequestCatcherMiddleware::class)
                 ->action([ChecklistItemController::class, 'delete'])
@@ -157,7 +145,7 @@ return [
         ->routes(
             Route::get('')
                 ->middleware(FormatDataResponseAsHtml::class)
-                ->action([\App\Controller\FrontController::class, 'index'])
+                ->action([App\Controller\FrontController::class, 'index'])
                 ->name('front/index'),
         ),
     // Swagger routes
@@ -165,9 +153,7 @@ return [
         ->routes(
             Route::get('')
                 ->middleware(FormatDataResponseAsHtml::class)
-                ->action(static function (SwaggerUi $swaggerUi, UrlGeneratorInterface $urlGenerator) {
-                    return $swaggerUi->withJsonUrl($urlGenerator->getUriPrefix() . '/docs/openapi.json');
-                })
+                ->action(static fn (SwaggerUi $swaggerUi, UrlGeneratorInterface $urlGenerator) => $swaggerUi->withJsonUrl($urlGenerator->getUriPrefix() . '/docs/openapi.json'))
                 ->name('swagger/index'),
             Route::get('/openapi.json')
                 ->middleware(FormatDataResponseAsJson::class)

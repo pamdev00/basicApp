@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Auth\Listener;
 
-use App\Auth\RegistrationMailer;
+use App\Auth\RegistrationMailerInterface;
 use App\Auth\UserRegistered;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -14,7 +14,7 @@ final readonly class UserRegisteredListener
 {
     public function __construct(
         private LoggerInterface $logger,
-        private RegistrationMailer $registrationMailer,
+        private RegistrationMailerInterface $registrationMailer,
         private UrlGeneratorInterface $urlGenerator,
         private string $verificationRouteName
     ) {

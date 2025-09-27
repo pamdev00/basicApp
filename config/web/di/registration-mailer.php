@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 
 use App\Auth\RegistrationMailer;
+use App\Auth\RegistrationMailerInterface;
 
 /** @var array $params */
 return [
@@ -13,4 +14,5 @@ return [
             'senderEmail' => $params['mailer']['senderEmail'],
         ],
     ],
+    RegistrationMailerInterface::class => RegistrationMailer::class,
 ];

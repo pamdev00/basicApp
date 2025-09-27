@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Auth;
 
 use App\Exception\NotFoundException;
-use App\User\UserRepositoryInterface;
 use App\User\Enum\UserStatus;
+use App\User\UserRepositoryInterface;
 use Cycle\ORM\EntityManagerInterface;
 use DateTimeImmutable;
 use Psr\EventDispatcher\EventDispatcherInterface;

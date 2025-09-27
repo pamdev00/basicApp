@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Cards\Card\Formatter;
 
-use App\Cards\Card\Entity\Checklist;
 use App\Cards\Card\Entity\ChecklistItem;
 use OpenApi\Attributes as OA;
 

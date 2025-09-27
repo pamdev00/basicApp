@@ -163,8 +163,8 @@ final class AuthCest
             'status' => HttpCode::UNPROCESSABLE_ENTITY,
             'detail' => 'One or more validation errors occurred.',
             'errors' => [
-                'passwordConfirm' => ['PasswordConfirm must be equal to "password".']
-            ]
+                'passwordConfirm' => ['PasswordConfirm must be equal to "password".'],
+            ],
         ]);
 
         // Invalid email
@@ -184,8 +184,8 @@ final class AuthCest
             'status' => HttpCode::UNPROCESSABLE_ENTITY,
             'detail' => 'One or more validation errors occurred.',
             'errors' => [
-                'email' => ['Email is not a valid email address.']
-            ]
+                'email' => ['Email is not a valid email address.'],
+            ],
         ]);
     }
 

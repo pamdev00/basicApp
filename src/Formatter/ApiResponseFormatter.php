@@ -10,17 +10,10 @@ use Yiisoft\DataResponse\DataResponse;
 use Yiisoft\DataResponse\DataResponseFormatterInterface;
 use Yiisoft\DataResponse\Formatter\JsonDataResponseFormatter;
 
-final class ApiResponseFormatter implements DataResponseFormatterInterface
+final readonly class ApiResponseFormatter implements DataResponseFormatterInterface
 {
-    private readonly ApiResponseDataFactory $apiResponseDataFactory;
-    private readonly JsonDataResponseFormatter $jsonDataResponseFormatter;
-
-    public function __construct(
-        ApiResponseDataFactory $apiResponseDataFactory,
-        JsonDataResponseFormatter $jsonDataResponseFormatter
-    ) {
-        $this->apiResponseDataFactory = $apiResponseDataFactory;
-        $this->jsonDataResponseFormatter = $jsonDataResponseFormatter;
+    public function __construct(private ApiResponseDataFactory $apiResponseDataFactory, private JsonDataResponseFormatter $jsonDataResponseFormatter)
+    {
     }
 
     public function format(DataResponse $dataResponse): ResponseInterface

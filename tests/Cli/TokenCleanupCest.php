@@ -9,7 +9,7 @@ use DateTimeImmutable;
 
 final class TokenCleanupCest
 {
-    private const TABLE_NAME = 'email_verification_token';
+    private const string TABLE_NAME = 'email_verification_token';
 
     public function _before(CliTester $I): void
     {

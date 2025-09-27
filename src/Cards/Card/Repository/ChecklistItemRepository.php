@@ -7,6 +7,7 @@ namespace App\Cards\Card\Repository;
 use App\Cards\Card\Entity\ChecklistItem;
 use App\Cards\Card\Scope\PublicScope;
 use Cycle\ORM\Select;
+use DateMalformedStringException;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Throwable;
@@ -108,7 +109,7 @@ final class ChecklistItemRepository extends Select\Repository
      * Find recently completed items.
      *
      * @psalm-return DataReaderInterface<int, ChecklistItem>
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      */
     public function findRecentlyCompleted(int $days = 7): DataReaderInterface
     {
@@ -201,7 +202,7 @@ final class ChecklistItemRepository extends Select\Repository
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      */
     public function getMaxUpdatedAt(): DateTimeInterface
     {

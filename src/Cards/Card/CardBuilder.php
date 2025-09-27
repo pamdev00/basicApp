@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace App\Cards\Card;
 
 use App\Cards\Card\Entity\Card;
-use App\Cards\Card\Repository\CardRepository;
 use App\Cards\Card\Repository\TagRepository;
 use App\Cards\Card\Request\EditCardRequest;
 
-final class CardBuilder
+final readonly class CardBuilder
 {
     public function __construct(
-        private readonly TagRepository $tagRepository,
-    )
-    {
+        private TagRepository $tagRepository,
+    ) {
     }
 
     public function build(Card $card, EditCardRequest $request): Card

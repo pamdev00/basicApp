@@ -9,6 +9,7 @@ use App\Auth\EmailVerificationToken;
 use App\Auth\EmailVerificationTokenRepositoryInterface;
 use Cycle\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionObject;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -32,9 +33,8 @@ final class TokenCleanupCommandTest extends TestCase
         $input = $this->createMock(InputInterface::class);
         $output = $this->createMock(OutputInterface::class);
 
-        $reflection = new \ReflectionObject($command);
+        $reflection = new ReflectionObject($command);
         $method = $reflection->getMethod('execute');
-        $method->setAccessible(true);
 
         $result = $method->invoke($command, $input, $output);
 
@@ -55,9 +55,8 @@ final class TokenCleanupCommandTest extends TestCase
         $input = $this->createMock(InputInterface::class);
         $output = $this->createMock(OutputInterface::class);
 
-        $reflection = new \ReflectionObject($command);
+        $reflection = new ReflectionObject($command);
         $method = $reflection->getMethod('execute');
-        $method->setAccessible(true);
 
         $result = $method->invoke($command, $input, $output);
 

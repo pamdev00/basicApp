@@ -7,7 +7,7 @@ namespace App\Controller;
 use Yiisoft\DataResponse\DataResponse;
 use Yiisoft\Yii\View\Renderer\ViewRenderer;
 
-final class FrontController
+final readonly class FrontController
 {
     private ViewRenderer $viewRenderer;
 
@@ -19,8 +19,7 @@ final class FrontController
 
     public function index(
 
-    ): DataResponse
-    {
+    ): DataResponse {
 
 
         return $this->viewRenderer->render('index', ['name' => 'vova']);

@@ -8,14 +8,12 @@ use App\Exception\NotFoundException;
 use Yiisoft\Data\Paginator\OffsetPaginator;
 use Yiisoft\Data\Paginator\PaginatorInterface;
 
-final class BlogService
+final readonly class BlogService
 {
-    private const POSTS_PER_PAGE = 10;
-    private PostRepository $postRepository;
+    private const int POSTS_PER_PAGE = 10;
 
-    public function __construct(PostRepository $postRepository)
+    public function __construct(private PostRepository $postRepository)
     {
-        $this->postRepository = $postRepository;
     }
 
     /**
@@ -32,11 +30,9 @@ final class BlogService
     }
 
     /**
-     * @param int $id
      *
      * @throws NotFoundException
      *
-     * @return Post
      */
     public function getPost(int $id): Post
     {

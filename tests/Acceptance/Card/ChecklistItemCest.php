@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Acceptance\Card;
 
-
 use App\Tests\Support\AcceptanceTester;
 use App\Tests\Support\Helper\CardHelper;
 use App\Tests\Support\Helper\ChecklistHelper;

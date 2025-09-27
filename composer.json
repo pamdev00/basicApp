@@ -94,7 +94,9 @@
         "codeception/module-filesystem": "*",
         "codeception/module-phpbrowser": "^3.0",
         "codeception/module-rest": "^3.1",
+        "friendsofphp/php-cs-fixer": "*",
         "phpunit/phpunit": "^9.5",
+        "rector/rector": "*",
         "roave/infection-static-analysis-plugin": "^1.16",
         "roave/security-advisories": "dev-latest",
         "spatie/phpunit-watcher": "^1.23",
@@ -126,7 +128,11 @@
             "App\\Installer::copyEnvFile"
         ],
         "test": "codecept run",
-        "test-watch": "phpunit-watcher watch"
+        "test-watch": "phpunit-watcher watch",
+        "cs-fix": "php-cs-fixer fix --diff --dry-run",
+        "cs-fix-apply": "php-cs-fixer fix",
+        "rector": "rector process --dry-run",
+        "rector-apply": "rector process"
     },
     "extra": {
         "branch-alias": {

@@ -12,8 +12,6 @@ use Yiisoft\Auth\Method\HttpHeader;
 use Yiisoft\Auth\Middleware\Authentication;
 use Yiisoft\Definitions\Reference;
 
-/** @var array $params */
-
 return [
     UserRepositoryInterface::class => UserRepository::class,
     IdentityRepositoryInterface::class => UserRepository::class,

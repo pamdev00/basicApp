@@ -42,5 +42,17 @@ test-card:
 psalm:
 	$(COMPOSE) run card-php-cli ./vendor/bin/psalm
 
+cs-fix:
+	$(COMPOSE) run --rm card-php-cli composer run-script cs-fix
+
+cs-fix-apply:
+	$(COMPOSE) run --rm card-php-cli composer run-script cs-fix-apply
+
+rector:
+	$(COMPOSE) run --rm card-php-cli composer run-script rector
+
+rector-apply:
+	$(COMPOSE) run --rm card-php-cli composer run-script rector-apply
+
 migrate:
 	$(COMPOSE) run card-php-cli ./yii migrate/up --no-interaction

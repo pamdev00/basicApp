@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace App\Cards\Card\Controller;
 
-use App\Cards\Card\Entity\ChecklistItem;
 use App\Cards\Card\Formatter\ChecklistItemFormatter;
-use App\Cards\Card\Service\ChecklistItemService;
-use App\Cards\Card\Service\ChecklistService;
 use App\Cards\Card\Request\CreateChecklistItemRequest;
 use App\Cards\Card\Request\UpdateChecklistItemRequest;
-use App\Cards\Card\Formatter\ChecklistFormatter;
+use App\Cards\Card\Service\ChecklistItemService;
+use App\Cards\Card\Service\ChecklistService;
 use App\Formatter\PaginatorFormatter;
 use Exception;
 use OpenApi\Attributes as OA;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Yiisoft\DataResponse\DataResponseFactoryInterface;
@@ -30,7 +27,8 @@ final readonly class ChecklistItemController
         private ChecklistItemService $checklistItemService,
         private ChecklistService $checklistService,
         private ChecklistItemFormatter $checklistFormatter,
-    ) {}
+    ) {
+    }
 
 
     #[OA\Get(
@@ -64,13 +62,13 @@ final readonly class ChecklistItemController
             ),
         ]
     )]
-    public function index(PaginatorFormatter $paginatorFormatter,
+    public function index(
+        PaginatorFormatter $paginatorFormatter,
         ServerRequestInterface $request,
-        #[RouteArgument('checklistId')] string $checklistId,
-        #[Query('page')] int $page = 1
-    ): Response
-    {
-        $paginator = $this->checklistItemService->getFullItems( checklistId: $checklistId);
+        #[RouteArgument('checklistId')]
+        string $checklistId
+    ): Response {
+        $paginator = $this->checklistItemService->getFullItems(checklistId: $checklistId);
         $cards = [];
         foreach ($paginator->read() as $post) {
             $cards[] = $this->checklistFormatter->format($post);
@@ -136,7 +134,8 @@ final readonly class ChecklistItemController
         ]
     )]
     public function create(
-        #[RouteArgument('id')] string $checklistId,
+        #[RouteArgument('id')]
+        string $checklistId,
         CreateChecklistItemRequest $request
     ): Response {
         $checklist = $this->checklistService->getFullChecklist($checklistId);
@@ -218,7 +217,8 @@ final readonly class ChecklistItemController
         ]
     )]
     public function update(
-        #[RouteArgument('id')] string $id,
+        #[RouteArgument('id')]
+        string $id,
         UpdateChecklistItemRequest $request
     ): Response {
         $item = $this->checklistItemService->getById($id);

@@ -6,7 +6,7 @@ namespace App\Queue;
 
 use Psr\Log\LoggerInterface;
 
-final class LoggingAuthorizationHandler
+final readonly class LoggingAuthorizationHandler
 {
     public const string NAME = 'logging-authorization-handler';
     public const string CHANNEL = 'logging-authorization-channel';

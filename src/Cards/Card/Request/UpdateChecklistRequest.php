@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Cards\Card\Request;
 
-
 use OpenApi\Attributes as OA;
 use Yiisoft\Input\Http\AbstractInput;
 use Yiisoft\Input\Http\Attribute\Parameter\Body;
@@ -31,7 +30,7 @@ final class UpdateChecklistRequest extends AbstractInput implements RulesProvide
 {
     #[Body('title')]
     #[Required]
-    private  string $title = '';
+    private string $title = '';
 
     public function getTitle(): string
     {

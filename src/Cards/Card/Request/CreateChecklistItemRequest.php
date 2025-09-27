@@ -7,9 +7,9 @@ namespace App\Cards\Card\Request;
 use OpenApi\Attributes as OA;
 use Yiisoft\Input\Http\AbstractInput;
 use Yiisoft\Input\Http\Attribute\Parameter\Body;
+use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
-use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\RulesProviderInterface;
 
 #[OA\Schema(
@@ -34,7 +34,7 @@ use Yiisoft\Validator\RulesProviderInterface;
     ],
     type: 'object'
 )]
-final class CreateChecklistItemRequest  extends AbstractInput implements RulesProviderInterface
+final class CreateChecklistItemRequest extends AbstractInput implements RulesProviderInterface
 {
     #[Body('description')]
     #[Required]
@@ -67,4 +67,3 @@ final class CreateChecklistItemRequest  extends AbstractInput implements RulesPr
         ];
     }
 }
-

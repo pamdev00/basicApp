@@ -15,7 +15,7 @@ use Yiisoft\Translator\TranslatorInterface;
 final readonly class NotFoundHandler implements RequestHandlerInterface
 {
     public function __construct(
-        private  DataResponseFormatterInterface $formatter,
+        private DataResponseFormatterInterface $formatter,
         private DataResponseFactoryInterface $dataResponseFactory,
         private TranslatorInterface $translator,
     ) {

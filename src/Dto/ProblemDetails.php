@@ -5,8 +5,21 @@ declare(strict_types=1);
 namespace App\Dto;
 
 use JsonSerializable;
-use Throwable;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(
+    schema: 'ProblemDetails',
+    type: 'object',
+    title: 'Problem Details',
+    description: 'A standard format for specifying errors in HTTP API responses based on RFC 7807.',
+    properties: [
+        new OA\Property(property: 'type', type: 'string', format: 'uri', description: 'A URI reference that identifies the problem type.', example: '/docs/errors/validation-error'),
+        new OA\Property(property: 'title', type: 'string', description: 'A short, human-readable summary of the problem type.', example: 'Validation Failed'),
+        new OA\Property(property: 'status', type: 'integer', format: 'int32', description: 'The HTTP status code.', example: 422),
+        new OA\Property(property: 'detail', type: 'string', description: 'A human-readable explanation specific to this occurrence of the problem.', example: 'One or more validation errors occurred.'),
+        new OA\Property(property: 'instance', type: 'string', format: 'uri', description: 'A URI reference that identifies the specific occurrence of the problem.', example: '/auth/register'),
+    ]
+)]
 final class ProblemDetails implements JsonSerializable
 {
     private array $data = [];

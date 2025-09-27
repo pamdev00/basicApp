@@ -12,10 +12,9 @@ use Yiisoft\DataResponse\DataResponseFactoryInterface;
 class InfoController
 {
     public function __construct(
-        private VersionProvider $versionProvider,
-        private AuthorProvider $authorProvider
-    )
-    {
+        private readonly VersionProvider $versionProvider,
+        private readonly AuthorProvider $authorProvider
+    ) {
     }
 
     #[OA\Get(

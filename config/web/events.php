@@ -9,9 +9,9 @@ use Yiisoft\Yii\Middleware\Event\SetLocaleEvent;
 
 return [
     SetLocaleEvent::class => [
-        static fn(TranslatorInterface $translator, SetLocaleEvent $event) => $translator->setLocale($event->getLocale()),
+        static fn (TranslatorInterface $translator, SetLocaleEvent $event) => $translator->setLocale($event->getLocale()),
     ],
     UserRegistered::class => [
-        UserRegisteredListener::class
+        UserRegisteredListener::class,
     ],
 ];

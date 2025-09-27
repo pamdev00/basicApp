@@ -79,7 +79,7 @@ final class TagRepository extends Select\Repository
         }
 
         // Sort by usage count descending
-        uasort($stats, fn($a, $b) => $b['cards_count'] <=> $a['cards_count']);
+        uasort($stats, fn ($a, $b) => $b['cards_count'] <=> $a['cards_count']);
 
         return $stats;
     }

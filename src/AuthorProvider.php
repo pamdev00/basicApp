@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
-final class AuthorProvider
+final readonly class AuthorProvider
 {
     public function __construct(private string $author)
     {

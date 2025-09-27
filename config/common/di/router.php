@@ -38,7 +38,6 @@ return [
             )
             ->addGroup(
                 Group::create()->routes(...$config->get('routes')),
-
             );
 
         return new RouteCollection($collector);

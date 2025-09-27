@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Support\Helper;
 
-
-
 use App\Tests\Support\AcceptanceTester;
 use Codeception\Util\HttpCode;
 
@@ -19,7 +17,7 @@ final class CardHelper
             'description' => 'Test desc',
             'status' => 'todo',
             'priority' => 'medium',
-            'tags' => []
+            'tags' => [],
         ], $data));
 
         $I->seeResponseCodeIs(HttpCode::CREATED);

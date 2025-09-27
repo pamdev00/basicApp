@@ -7,17 +7,15 @@ namespace App\Auth;
 use App\Auth\Exception\InvalidTokenException;
 use App\Auth\Exception\TokenExpiredException;
 use App\Auth\Exception\TokenUsedException;
+use App\Dto\ProblemDetails;
 use App\User\UserRequest;
 use App\User\UserService;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Yiisoft\DataResponse\DataResponseFactoryInterface as ResponseFactory;
 use Yiisoft\Router\HydratorAttribute\RouteArgument;
 use Yiisoft\Validator\ValidatorInterface;
-use App\Auth\ResendVerificationService;
-use App\Auth\ResendRequest;
 
 #[OA\Tag(name: 'auth', description: 'Authentication')]
 #[OA\SecurityScheme(securityScheme: 'ApiKey', type: 'apiKey', name: 'X-Api-Key', in: 'header')]
@@ -61,22 +59,18 @@ final readonly class AuthController
             ),
             new OA\Response(
                 response: '409',
-                description: 'Conflict',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'error', type: 'string', example: 'User with this email already exists.')
-                    ],
-                    type: 'object'
-                )
-            )
+                description: 'Conflict - user with this email already exists',
+                content: new OA\JsonContent(ref: '#/components/schemas/ProblemDetails')
+            ),
         ]
     )]
     public function register(RegisterRequest $request): ResponseInterface
     {
         $result = $this->validator->validate($request);
         if (!$result->isValid()) {
-           return $this->responseFactory->createResponse(
-                $result,422
+            return $this->responseFactory->createResponse(
+                $result,
+                422
             );
         }
 
@@ -87,7 +81,13 @@ final readonly class AuthController
                 $request->getEmail(),
             );
         } catch (Throwable $e) {
-            return $this->responseFactory->createResponse(['error' => $e->getMessage()], 409);
+            $problemDetails = new ProblemDetails(
+                type: '/docs/errors/user-already-exists',
+                title: 'User Already Exists',
+                status: 409,
+                detail: $e->getMessage()
+            );
+            return $this->responseFactory->createResponse($problemDetails);
         }
 
 
@@ -176,14 +176,63 @@ final readonly class AuthController
         return $this->responseFactory->createResponse();
     }
 
+    #[OA\Get(
+        path: '/verify-email/{token}',
+        description: 'Verify user email with a token from the verification email',
+        summary: 'Verify user email',
+        tags: ['auth'],
+        parameters: [
+            new OA\Parameter(
+                name: 'token',
+                in: 'path',
+                required: true,
+                description: 'The verification token',
+                schema: new OA\Schema(type: 'string')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: '200',
+                description: 'Email successfully verified',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'status', type: 'string', example: 'ok'),
+                    ],
+                    type: 'object'
+                )
+            ),
+            new OA\Response(
+                response: '422',
+                description: 'Invalid, used, or expired token',
+                content: new OA\JsonContent(ref: '#/components/schemas/ProblemDetails')
+            ),
+            new OA\Response(
+                response: '500',
+                description: 'Internal server error',
+                content: new OA\JsonContent(ref: '#/components/schemas/ProblemDetails')
+            ),
+        ]
+    )]
     public function verifyEmail(#[RouteArgument('token')] string $token): ResponseInterface
     {
         try {
             $this->verifyEmailService->verify($token);
         } catch (InvalidTokenException|TokenUsedException|TokenExpiredException $e) {
-            return $this->responseFactory->createResponse(['error' => $e->getMessage()], 422);
-        } catch (Throwable $e) {
-            return $this->responseFactory->createResponse(['error' => 'An unexpected error occurred.'], 500);
+            $problemDetails = new ProblemDetails(
+                type: '/docs/errors/invalid-verification-token',
+                title: 'Invalid Verification Token',
+                status: 422,
+                detail: $e->getMessage()
+            );
+            return $this->responseFactory->createResponse($problemDetails);
+        } catch (Throwable) {
+            $problemDetails = new ProblemDetails(
+                type: '/docs/errors/unexpected-error',
+                title: 'An unexpected error occurred',
+                status: 500,
+                detail: 'An unexpected error occurred.'
+            );
+            return $this->responseFactory->createResponse($problemDetails);
         }
 
         return $this->responseFactory->createResponse(['status' => 'ok']);
@@ -200,8 +249,16 @@ final readonly class AuthController
         tags: ['auth'],
         responses: [
             new OA\Response(response: '202', description: 'Accepted'),
-            new OA\Response(response: '404', description: 'User not found'),
-            new OA\Response(response: '422', description: 'Validation error'),
+            new OA\Response(
+                response: '404',
+                description: 'User not found',
+                content: new OA\JsonContent(ref: '#/components/schemas/ProblemDetails')
+            ),
+            new OA\Response(
+                response: '422',
+                description: 'Validation error',
+                content: new OA\JsonContent(ref: '#/components/schemas/ProblemDetails')
+            ),
         ]
     )]
     public function resendVerification(ResendRequest $request): ResponseInterface

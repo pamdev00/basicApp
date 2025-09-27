@@ -18,25 +18,16 @@ class EmailVerificationToken
     #[Column(type: 'primary')]
     private ?int $id = null;
 
-    #[Column(type: 'string')]
-    private string $tokenHash;
-
-    #[Column(type: 'datetime')]
-    private DateTimeImmutable $expiresAt;
-
     #[Column(type: 'datetime', nullable: true)]
     private ?DateTimeImmutable $usedAt = null;
 
-    private DateTimeImmutable $createdAt;
+    private readonly DateTimeImmutable $createdAt;
 
-    #[BelongsTo(target: User::class)]
-    private User $user;
-
-    public function __construct(string $tokenHash, DateTimeImmutable $expiresAt, User $user)
+    public function __construct(#[Column(type: 'string')]
+    private readonly string $tokenHash, #[Column(type: 'datetime')]
+    private readonly DateTimeImmutable $expiresAt, #[BelongsTo(target: User::class)]
+    private readonly User $user)
     {
-        $this->tokenHash = $tokenHash;
-        $this->expiresAt = $expiresAt;
-        $this->user = $user;
         $this->createdAt = new DateTimeImmutable();
     }
 

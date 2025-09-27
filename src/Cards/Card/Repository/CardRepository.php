@@ -6,8 +6,6 @@ namespace App\Cards\Card\Repository;
 
 use App\Cards\Card\Entity\Card;
 use Cycle\ORM\Select;
-use DateTimeImmutable;
-use DateTimeInterface;
 use Throwable;
 use Yiisoft\Data\Cycle\Reader\EntityReader;
 use Yiisoft\Data\Cycle\Writer\EntityWriter;
@@ -30,15 +28,15 @@ final class CardRepository extends Select\Repository
     {
         $query = $this
             ->select();
-//            ->load(['user',
-//                'tags',
-//                'checklists.items'
-//            ]);
-        if($params){
+        //            ->load(['user',
+        //                'tags',
+        //                'checklists.items'
+        //            ]);
+        if ($params) {
             // todo для params лучше сделать отдельный фильтр типа CardFilter в котором хранить все эти параметры
             $query->andWhere(array_filter([
                 'status' => $params['status'] ?? null,
-                'priority' => $params['priority'] ?? null
+                'priority' => $params['priority'] ?? null,
             ]));
         }
         return $this->prepareDataReader($query);

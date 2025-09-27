@@ -8,7 +8,7 @@ use Psr\Log\LoggerInterface;
 use Yiisoft\Mailer\MailerInterface;
 use Yiisoft\Mailer\Message;
 
-final readonly class RegistrationMailer
+final readonly class RegistrationMailer implements RegistrationMailerInterface
 {
     public function __construct(
         private LoggerInterface $logger,
@@ -19,7 +19,7 @@ final readonly class RegistrationMailer
 
     public function send(string $to, string $subject, string $htmlBody): void
     {
-        $this->logger->info('Mailer class: ' . get_class($this->mailer));
+        $this->logger->info('Mailer class: ' . $this->mailer::class);
 
         $message = (new Message())
             ->withFrom($this->senderEmail)

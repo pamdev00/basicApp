@@ -7,8 +7,6 @@ namespace App\User;
 use Cycle\ORM\ORMInterface;
 use Cycle\ORM\Select;
 use Yiisoft\Auth\IdentityInterface;
-use Yiisoft\Auth\IdentityRepositoryInterface;
-use Yiisoft\Auth\IdentityWithTokenRepositoryInterface;
 use Yiisoft\Data\Cycle\Reader\EntityReader;
 use Yiisoft\Data\Cycle\Writer\EntityWriter;
 use Yiisoft\Data\Reader\Sort;
@@ -17,8 +15,7 @@ final class UserRepository extends Select\Repository implements UserRepositoryIn
 {
     public function __construct(
         Select $select,
-        private ORMInterface $orm,
-        private EntityWriter $entityWriter,
+        private readonly EntityWriter $entityWriter,
     ) {
         parent::__construct($select);
     }
