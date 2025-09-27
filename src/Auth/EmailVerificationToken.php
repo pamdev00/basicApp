@@ -24,9 +24,9 @@ class EmailVerificationToken
     private readonly DateTimeImmutable $createdAt;
 
     public function __construct(#[Column(type: 'string')]
-    private readonly string $tokenHash, #[Column(type: 'datetime')]
-    private readonly DateTimeImmutable $expiresAt, #[BelongsTo(target: User::class)]
-    private readonly User $user)
+        private readonly string $tokenHash, #[Column(type: 'datetime')]
+        private readonly DateTimeImmutable $expiresAt, #[BelongsTo(target: User::class)]
+        private readonly User $user)
     {
         $this->createdAt = new DateTimeImmutable();
     }

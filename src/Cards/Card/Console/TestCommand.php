@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace App\Cards\Card\Console;
 
 use App\Cards\Card\Repository\TagRepository;
-use App\Cards\Card\Service\CardService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Yiisoft\FormModel\FormHydrator;
 use Yiisoft\Yii\Console\ExitCode;
 
 final class TestCommand extends Command

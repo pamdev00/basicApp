@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\VO;
 
 use InvalidArgumentException;
+use Stringable;
 
-final readonly class Email implements \Stringable
+final readonly class Email implements Stringable
 {
     private function __construct(private string $value)
     {

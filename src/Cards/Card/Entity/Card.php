@@ -72,8 +72,8 @@ class Card
     #[HasMany(target: Checklist::class, fkAction: 'CASCADE')]
     private readonly Collection $checklists;
     public function __construct(#[Column(type: 'string(255)')]
-    private string $title = '', #[Column(type: 'text', nullable: true)]
-    private ?string $description = null)
+        private string $title = '', #[Column(type: 'text', nullable: true)]
+        private ?string $description = null)
     {
         $this->created_at = new DateTimeImmutable();
         $this->updated_at = new DateTimeImmutable();

@@ -23,8 +23,7 @@ class CardTag
         private ?Card $card,
         #[BelongsTo(target: Tag::class, nullable: false)]
         private ?Tag $tag
-    )
-    {
+    ) {
     }
     public function getId(): ?UuidInterface
     {

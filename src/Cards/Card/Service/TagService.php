@@ -134,7 +134,7 @@ class TagService
         $tags = [];
 
         foreach ($tagNames as $name) {
-            $name = trim((string) $name);
+            $name = trim((string)$name);
             if (!empty($name)) {
                 $tags[] = $this->findOrCreate($name);
             }

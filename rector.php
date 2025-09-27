@@ -6,6 +6,7 @@ use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
 use Rector\Php82\Rector\Param\AddSensitiveParameterAttributeRector;
 
+
 return RectorConfig::configure()
     ->withCache(cacheDirectory: __DIR__ . '/runtime/rector')
     ->withPaths([

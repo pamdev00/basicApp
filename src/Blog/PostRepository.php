@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Blog;
 
 use Cycle\ORM\Select;
+use Override;
 use Yiisoft\Data\Cycle\Reader\EntityReader;
 use Yiisoft\Data\Cycle\Writer\EntityWriter;
 
@@ -18,7 +19,7 @@ final class PostRepository extends Select\Repository
     /**
      * @psalm-return EntityReader<array-key, Post>
      */
-    #[\Override]
+    #[Override]
     public function findAll(array $scope = [], array $orderBy = []): EntityReader
     {
         /** @psalm-var EntityReader<array-key, Post> */

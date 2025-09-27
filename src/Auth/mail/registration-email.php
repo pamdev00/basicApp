@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\User\User;
-use Yiisoft\Router\UrlGeneratorInterface;
 
 $verificationUrl = $urlGenerator->generate(
     'auth/verify-email',

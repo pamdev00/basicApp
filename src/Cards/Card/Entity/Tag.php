@@ -33,7 +33,7 @@ class Tag
     private readonly PivotedCollection $cards;
 
     public function __construct(#[Column(type: 'string(100)')]
-    private string $name = '')
+        private string $name = '')
     {
         $this->cards = new PivotedCollection();
     }
