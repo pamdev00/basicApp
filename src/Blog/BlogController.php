@@ -20,6 +20,7 @@ final readonly class BlogController
     public function __construct( PostRepository $postRepository, private DataResponseFactoryInterface $responseFactory, private PostFormatter $postFormatter, private PostBuilder $postBuilder, private BlogService $blogService)
     {
         $this->postRepository = $postRepository;
+
     }
 
     #[OA\Get(
